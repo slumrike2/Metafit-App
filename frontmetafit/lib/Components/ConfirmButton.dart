@@ -6,17 +6,17 @@ class ConfirmButton extends StatelessWidget {
   final void Function() onPressed;
 
   const ConfirmButton({
-    Key? key,
+    super.key,
     required this.text,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final sizeh = MediaQuery.of(context).size.height;
     final sizew = MediaQuery.of(context).size.width;
 
-    return Container(
+    return SizedBox(
       width: sizew * 0.5,
       height: sizeh * 0.07,
       child: ElevatedButton(

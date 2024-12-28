@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontmetafit/Pages/Home/Screen.dart';
 import 'Pages/Inicio de seion/forgottenPassword.dart';
 import 'const.dart';
 import 'Pages/Inicio de seion/loginPage.dart';
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
         LoginPage.routeName: (context) => const LoginPage(),
         registerPage.routeName: (context) => const registerPage(),
         forgottenPassword.routeName: (context) => const forgottenPassword(),
+        Screen.routeName: (context) => const Screen(),
       },
       initialRoute: LoginPage.routeName,
     );

@@ -13,7 +13,7 @@ class Textdropdowninput extends StatelessWidget {
   final String label;
 
   const Textdropdowninput({
-    Key? key,
+    super.key,
     required this.label,
     required this.nameText,
     required this.nameDropdown,
@@ -23,33 +23,31 @@ class Textdropdowninput extends StatelessWidget {
     this.value,
     this.errorText,
     this.validation,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          FormBuilderTextField(
-            name: nameText,
-            validator: validation,
-            decoration: InputDecoration(
-              hintText: hintText,
-              errorText: errorText,
-            ),
+    return Column(
+      children: [
+        FormBuilderTextField(
+          name: nameText,
+          validator: validation,
+          decoration: InputDecoration(
+            hintText: hintText,
+            errorText: errorText,
           ),
-          FormBuilderDropdown(
-            name: nameDropdown,
-            items: items.map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: onChanged,
-          ),
-        ],
-      ),
+        ),
+        FormBuilderDropdown(
+          name: nameDropdown,
+          items: items.map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          onChanged: onChanged,
+        ),
+      ],
     );
   }
 }

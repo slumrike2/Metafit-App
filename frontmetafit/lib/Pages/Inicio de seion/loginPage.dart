@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontmetafit/Components/ConfirmButton.dart';
+import 'package:frontmetafit/Pages/Home/Screen.dart';
 import 'package:frontmetafit/Pages/Inicio%20de%20seion/forgottenPassword.dart';
 import 'package:frontmetafit/Pages/Inicio%20de%20seion/registerPage.dart';
 import 'package:frontmetafit/const.dart';
@@ -79,9 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 ConfirmButton(
                   onPressed: () {
-                    if (_fbkey.currentState!.saveAndValidate()) {
-                      print(_fbkey.currentState!.value);
-                    }
+                    Navigator.pushReplacementNamed(context, Screen.routeName);
                   },
                   text: 'Login',
                 ),
@@ -90,14 +89,12 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text("Don't have an account?"),
-                      Container(
-                        child: TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                  context, registerPage.routeName);
-                            },
-                            child: Text('Sign Up')),
-                      ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, registerPage.routeName);
+                          },
+                          child: Text('Sign Up')),
                     ],
                   ),
                 ),
