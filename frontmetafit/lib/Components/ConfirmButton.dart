@@ -17,7 +17,7 @@ class ConfirmButton extends StatelessWidget {
     final sizew = MediaQuery.of(context).size.width;
 
     return Container(
-      width: sizew * 0.4,
+      width: sizew * 0.5,
       height: sizeh * 0.07,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(

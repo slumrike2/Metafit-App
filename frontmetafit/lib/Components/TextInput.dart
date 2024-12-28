@@ -7,6 +7,8 @@ class Textinput extends StatelessWidget {
   final String labelText;
   final String name;
   final bool obscureText;
+  final String? Function(String?)? validation;
+  final String? Function(String?)? onchangue;
 
   const Textinput({
     super.key,
@@ -14,6 +16,8 @@ class Textinput extends StatelessWidget {
     required this.labelText,
     required this.name,
     this.obscureText = false,
+    this.validation,
+    this.onchangue,
   });
 
   @override
@@ -37,10 +41,18 @@ class Textinput extends StatelessWidget {
             style: TextStyle(
               color: AppColors.complementary,
             ),
+            validator: (value) {
+              if (validation != null) {
+                return validation!(value);
+              }
+              return null;
+            },
+            onChanged: onchangue,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide(
+                  width: 3,
                   color: AppColors.secondary,
                 ),
               ),
@@ -48,7 +60,7 @@ class Textinput extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide(
                   color: AppColors.secondary,
-                  width: 2.0,
+                  width: 3.0,
                 ),
               ),
               filled: true,

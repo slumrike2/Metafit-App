@@ -9,13 +9,13 @@ class AppColors {
   static final Color complementary = Color(0xFFF2F2F2);
 }
 
-class textstyles {
-  //!AGREGAR TODOS LOS TEXTSTYLES QUE SE NECESITEN
-
-  static final TextStyle headline1 = TextStyle(
-    //! this should be consistent with de sizeh 
-    color: AppColors.complementary,
-    fontSize: 40,
-    fontWeight: FontWeight.bold,
-  );
+class TextStyles {
+  static TextStyle headline1(BuildContext context) {
+    final sizeh = MediaQuery.of(context).size.height;
+    return TextStyle(
+      color: AppColors.complementary,
+      fontSize: sizeh * 0.05, // Adjust the multiplier as needed
+      fontWeight: FontWeight.bold,
+    );
+  }
 }

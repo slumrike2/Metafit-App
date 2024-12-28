@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontmetafit/Pages/forgottenPassword.dart';
+import 'Pages/Inicio de seion/forgottenPassword.dart';
 import 'const.dart';
-import 'Pages/loginPage.dart';
-import 'Pages/registerPage.dart';
+import 'Pages/Inicio de seion/loginPage.dart';
+import 'Pages/Inicio de seion/registerPage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -29,12 +29,34 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primaryColor: AppColors.primary,
-        focusColor: AppColors.primary,
-        scaffoldBackgroundColor: AppColors.primary,
-        useMaterial3: true,
+      title: 'Metafit App',
+      theme: ThemeData.dark().copyWith(
+        colorScheme: ColorScheme.dark(
+          primary: AppColors.secondary, // Header background color
+          onPrimary: AppColors.complementary, // Header text color
+          surface: AppColors.primary, // Background color
+          onSurface: AppColors.complementary, // Text color
+        ),
+        scaffoldBackgroundColor: AppColors.primary, // App background color
+        dialogBackgroundColor: AppColors.primary, // Dialog background color
+        inputDecorationTheme: InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.secondary, width: 3),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.secondary, width: 3),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red, width: 3),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red, width: 3),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+        ),
       ),
       routes: {
         LoginPage.routeName: (context) => const LoginPage(),
