@@ -36,7 +36,7 @@ class _RoutineWidgetState extends State<RoutineWidget> {
           width: sizew * 0.9,
           height: sizeh * 0.175,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: AppColors.secondary,
               width: 2,
