@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontmetafit/Pages/Home/homePage.dart';
+import 'package:frontmetafit/Pages/Home/routinesPage.dart';
+import 'package:frontmetafit/Pages/Home/progressPage.dart';
+import 'package:frontmetafit/Pages/Home/settingsPage.dart';
 import 'package:frontmetafit/const.dart';
 
 class Screen extends StatefulWidget {
@@ -12,16 +16,17 @@ class Screen extends StatefulWidget {
 // ignore: camel_case_types
 class _forgottenPasswordState extends State<Screen> {
   dynamic index = 0;
+  final List<Widget> _children = [
+    HomePage(),
+    RoutinesPage(),
+    ProgressPage(),
+    SettingsPage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Go back'))),
+      body: _children[index],
       bottomNavigationBar: BottomNavigationBar(
           selectedItemColor: AppColors.complementary,
           unselectedItemColor: AppColors.secondary,
