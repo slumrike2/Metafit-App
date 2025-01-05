@@ -15,7 +15,70 @@ class TextStyles {
     return TextStyle(
       color: AppColors.complementary,
       fontSize: sizeh * 0.05, // Adjust the multiplier as needed
-      fontWeight: FontWeight.bold,
+      fontFamily: 'BebasNeue',
+    );
+  }
+
+  static TextStyle headline2(BuildContext context) {
+    final sizeh = MediaQuery.of(context).size.height;
+    return TextStyle(
+      color: AppColors.complementary,
+      fontSize: sizeh * 0.04, // Adjust the multiplier as needed
+      fontFamily: 'BebasNeue',
+    );
+  }
+
+  static TextStyle headline3(BuildContext context) {
+    final sizeh = MediaQuery.of(context).size.height;
+    return TextStyle(
+      color: AppColors.complementary,
+      fontSize: sizeh * 0.03, // Adjust the multiplier as needed
+      fontFamily: 'BebasNeue',
+    );
+  }
+
+  static TextStyle subtitle(BuildContext context) {
+    final sizeh = MediaQuery.of(context).size.height;
+    return TextStyle(
+      color: AppColors.complementary,
+      fontSize: sizeh * 0.025, // Adjust the multiplier as needed
+      fontFamily: 'Montserrat',
+    );
+  }
+
+  static TextStyle bodyMonse(BuildContext context) {
+    final sizeh = MediaQuery.of(context).size.height;
+    return TextStyle(
+      color: AppColors.complementary,
+      fontSize: sizeh * 0.02, // Adjust the multiplier as needed
+      fontFamily: 'Montserrat',
+    );
+  }
+
+  static TextStyle bodyBebas(BuildContext context) {
+    final sizeh = MediaQuery.of(context).size.height;
+    return TextStyle(
+      color: AppColors.complementary,
+      fontSize: sizeh * 0.02, // Adjust the multiplier as needed
+      fontFamily: 'BebasNeue',
+    );
+  }
+
+  static TextStyle bodyBebasSmall(BuildContext context) {
+    final sizeh = MediaQuery.of(context).size.height;
+    return TextStyle(
+      color: AppColors.complementary,
+      fontSize: sizeh * 0.015, // Adjust the multiplier as needed
+      fontFamily: 'BebasNeue',
+    );
+  }
+
+  static TextStyle bodyMonseSmall(BuildContext context) {
+    final sizeh = MediaQuery.of(context).size.height;
+    return TextStyle(
+      color: AppColors.complementary,
+      fontSize: sizeh * 0.015, // Adjust the multiplier as needed
+      fontFamily: 'Montserrat',
     );
   }
 }

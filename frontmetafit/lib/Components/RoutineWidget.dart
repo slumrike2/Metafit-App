@@ -30,107 +30,106 @@ class _RoutineWidgetState extends State<RoutineWidget> {
     final sizeh = MediaQuery.of(context).size.height;
 
     return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          width: sizew * 0.9,
-          height: sizeh * 0.175,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: AppColors.secondary,
-              width: 2,
-            ),
-            color: AppColors.primaryDark,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.name,
-                      style: TextStyle(fontSize: 32),
-                    ),
-                    Text(
-                      widget.description,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 16),
-                      maxLines: 3,
-                    ),
-                  ],
-                ),
+        alignment: AlignmentDirectional.topEnd,
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            height: sizeh * 0.2,
+            width: sizew * 0.85,
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppColors.primaryDark,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: AppColors.secondary,
+                width: 2,
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 7.5),
-                child: Row(
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  flex: 2,
+                  child: Text(
+                    widget.name,
+                    style: TextStyles.headline1(context),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    widget.description,
+                    overflow: TextOverflow.fade,
+                    style: TextStyles.bodyMonseSmall(context),
+                  ),
+                ),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.end,
+                  spacing: 7.5,
                   children: [
                     Container(
                       width: sizew * 0.2,
                       height: sizeh * 0.03,
-                      margin: EdgeInsets.only(right: 7.5),
                       decoration: BoxDecoration(
                         color: AppColors.secondary,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Center(child: Text(widget.difficulty)),
+                      child: Center(
+                          child: Text(widget.equipment,
+                              style: TextStyles.bodyBebas(context))),
                     ),
                     Container(
                       width: sizew * 0.2,
                       height: sizeh * 0.03,
-                      margin: EdgeInsets.only(right: 7.5),
                       decoration: BoxDecoration(
                         color: AppColors.secondary,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Center(
                           child: Text(
-                              widget.cantExercises.toString() + ' exercises')),
+                              widget.cantExercises.toString() + ' exercises',
+                              style: TextStyles.bodyBebas(context))),
                     ),
                     Container(
                       width: sizew * 0.2,
                       height: sizeh * 0.03,
-                      margin: EdgeInsets.only(right: 7.5),
                       decoration: BoxDecoration(
                         color: AppColors.secondary,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Center(child: Text(widget.equipment)),
+                      child: Center(
+                          child: Text(widget.difficulty,
+                              style: TextStyles.bodyBebas(context))),
                     ),
                   ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -25,
+            right: -25,
+            child: Container(
+              width: 75,
+              height: 75,
+              decoration: BoxDecoration(
+                color: AppColors.primaryDark,
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: AppColors.secondary,
+                  width: 3,
                 ),
               ),
-            ],
-          ),
-        ),
-        Positioned(
-          top: -15,
-          right: -15,
-          child: Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: AppColors.primaryDark,
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColors.secondary,
-                width: 2,
-              ),
-            ),
-            child: Center(
-              child: Text(
-                widget.percentage,
-                style: TextStyle(color: AppColors.complementary, fontSize: 32),
+              child: Center(
+                child: Text(
+                  widget.percentage,
+                  style: TextStyles.headline3(context),
+                ),
               ),
             ),
           ),
-        ),
-      ],
-    );
+        ]);
   }
 }
