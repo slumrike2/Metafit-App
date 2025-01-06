@@ -38,54 +38,61 @@ class SumaryWidget extends StatelessWidget {
                     color: AppColors.complementary,
                   )),
             ),
-            ...data.map(
-              (e) => Row(
+            Expanded(
+              child: ListView(
                 children: [
-                  Expanded(
-                    flex: 4,
-                    child: FittedBox(
-                      alignment: Alignment.centerLeft,
-                      fit: BoxFit.scaleDown,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 4),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 2,
+                  for (var e in data)
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 4,
+                          child: FittedBox(
+                            alignment: Alignment.centerLeft,
+                            fit: BoxFit.scaleDown,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 4),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 2,
+                                ),
+                                color: AppColors.complementary,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Text(
+                                e.name,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: AppColors.primaryDark,
+                                ),
+                              ),
+                            ),
                           ),
-                          color: AppColors.complementary,
-                          borderRadius: BorderRadius.circular(16),
                         ),
-                        child: Text(
-                          e.name,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: AppColors.primaryDark,
+                        Expanded(
+                          flex: 13,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: LinearProgressIndicator(
+                              value: e.value / 100,
+                              backgroundColor: Colors.transparent,
+                              minHeight: 8,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppColors.complementary),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
                           ),
                         ),
-                      ),
+                        Expanded(
+                          flex: 1,
+                          child: Center(
+                              child: Text(e.value.toString(),
+                                  style: TextStyle(
+                                      color: AppColors.complementary))),
+                        ),
+                      ],
                     ),
-                  ),
-                  Expanded(
-                    flex: 13,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: LinearProgressIndicator(
-                        value: e.value / 100,
-                        backgroundColor: Colors.transparent,
-                        minHeight: 8,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                            AppColors.complementary),
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Center(
-                        child: Text(e.value.toString(),
-                            style: TextStyle(color: AppColors.complementary))),
-                  ),
                 ],
               ),
             ),
