@@ -25,7 +25,7 @@ class Historyworkoutwidget extends StatelessWidget {
             Text(
               'Shoulder Workout',
               textAlign: TextAlign.center,
-              style: TextStyles.headline3(context),
+              style: TextStyles.bodyBebas(context),
               overflow: TextOverflow.ellipsis,
             ),
             Row(
@@ -34,7 +34,7 @@ class Historyworkoutwidget extends StatelessWidget {
                 Text(
                   '2/5',
                   textAlign: TextAlign.center,
-                  style: TextStyles.headline3(context),
+                  style: TextStyles.bodyBebas(context),
                 ),
                 Icon(Icons.star_border),
               ],

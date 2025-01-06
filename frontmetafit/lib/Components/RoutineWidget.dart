@@ -35,7 +35,7 @@ class _RoutineWidgetState extends State<RoutineWidget> {
         children: [
           Container(
             height: sizeh * 0.2,
-            width: sizew * 0.85,
+            width: sizew * 0.9,
             padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: AppColors.primaryDark,
@@ -67,7 +67,7 @@ class _RoutineWidgetState extends State<RoutineWidget> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  spacing: 7.5,
+                  spacing: 8,
                   children: [
                     Container(
                       width: sizew * 0.2,
@@ -89,7 +89,7 @@ class _RoutineWidgetState extends State<RoutineWidget> {
                       ),
                       child: Center(
                           child: Text(
-                              widget.cantExercises.toString() + ' exercises',
+                              '${widget.cantExercises} exercises',
                               style: TextStyles.bodyBebas(context))),
                     ),
                     Container(

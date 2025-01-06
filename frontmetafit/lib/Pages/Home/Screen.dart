@@ -62,7 +62,7 @@ class _forgottenPasswordState extends State<Screen> {
                 ),
               ]
             : [],
-        toolbarHeight: sizeh * 0.1,
+        toolbarHeight: sizeh * 0.075,
         flexibleSpace: Container(
           child: index == 0
               ? Align(

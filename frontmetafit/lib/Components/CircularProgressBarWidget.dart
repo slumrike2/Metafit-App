@@ -97,13 +97,8 @@ class _CircularProgressBarWidgetState extends State<CircularProgressBarWidget>
             ),
           ),
           Center(
-            child: Text(
-              '${(_animation.value * 100).toStringAsFixed(0)}%',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            child: Text('${(_animation.value * 100).toStringAsFixed(0)}%',
+                style: TextStyles.headline3(context)),
           ),
         ],
       ),

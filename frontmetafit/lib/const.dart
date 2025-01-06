@@ -14,7 +14,7 @@ class TextStyles {
     final sizeh = MediaQuery.of(context).size.height;
     return TextStyle(
       color: AppColors.complementary,
-      fontSize: sizeh * 0.05, // Adjust the multiplier as needed
+      fontSize: sizeh * 0.04, // Adjust the multiplier as needed
       fontFamily: 'BebasNeue',
     );
   }
@@ -23,7 +23,7 @@ class TextStyles {
     final sizeh = MediaQuery.of(context).size.height;
     return TextStyle(
       color: AppColors.complementary,
-      fontSize: sizeh * 0.04, // Adjust the multiplier as needed
+      fontSize: sizeh * 0.03, // Adjust the multiplier as needed
       fontFamily: 'BebasNeue',
     );
   }
@@ -32,7 +32,7 @@ class TextStyles {
     final sizeh = MediaQuery.of(context).size.height;
     return TextStyle(
       color: AppColors.complementary,
-      fontSize: sizeh * 0.03, // Adjust the multiplier as needed
+      fontSize: sizeh * 0.0275, // Adjust the multiplier as needed
       fontFamily: 'BebasNeue',
     );
   }

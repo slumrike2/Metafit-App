@@ -16,7 +16,6 @@ class SumaryWidget extends StatelessWidget {
 
     return Container(
         height: sizeh * 0.2,
-        width: sizew * 0.9,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
