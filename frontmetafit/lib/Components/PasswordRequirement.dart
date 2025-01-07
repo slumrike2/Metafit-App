@@ -33,6 +33,6 @@ class PasswordRequirement extends StatelessWidget {
               ),
             ],
           )
-        : SizedBox.shrink();
+        : Container();
   }
 }

@@ -10,6 +10,15 @@ class AppColors {
 }
 
 class TextStyles {
+  static TextStyle headline0(BuildContext context) {
+    final sizeh = MediaQuery.of(context).size.height;
+    return TextStyle(
+      color: AppColors.complementary,
+      fontSize: sizeh * 0.05, // Adjust the multiplier as needed
+      fontFamily: 'BebasNeue',
+    );
+  }
+
   static TextStyle headline1(BuildContext context) {
     final sizeh = MediaQuery.of(context).size.height;
     return TextStyle(

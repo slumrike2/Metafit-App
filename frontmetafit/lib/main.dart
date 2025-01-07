@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontmetafit/Pages/Home/Screen.dart';
+import 'package:frontmetafit/Pages/Routine/doRoutine.dart';
+import 'package:frontmetafit/Pages/Routine/routinePreview.dart';
+
 import 'Pages/Inicio de seion/forgottenPassword.dart';
 import 'const.dart';
 import 'Pages/Inicio de seion/loginPage.dart';
@@ -64,8 +67,24 @@ class MyApp extends StatelessWidget {
         registerPage.routeName: (context) => const registerPage(),
         forgottenPassword.routeName: (context) => const forgottenPassword(),
         Screen.routeName: (context) => const Screen(),
+        Routinepreview.routeName: (context) => const Routinepreview(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == Doroutine.routeName) {
+          final args = settings.arguments as Map<String, String>?;
+          return MaterialPageRoute(
+            builder: (context) {
+              return Doroutine(
+                name: args?['name'] ?? 'No Name',
+                description: args?['description'] ?? 'No Description',
+              );
+            },
+          );
+        }
+        return null;
       },
       initialRoute: LoginPage.routeName,
+      
     );
   }
 }

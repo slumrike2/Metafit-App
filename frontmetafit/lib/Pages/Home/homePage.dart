@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
                 spacing: 8,
                 children: [
                   CircularProgressBarWidget(
-                      percentage: 0.95, size: sizeh * 0.3),
+                      percentage: 0.95, size: sizeh * 0.15),
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
@@ -65,24 +65,26 @@ class _HomePageState extends State<HomePage> {
                         border:
                             Border.all(color: AppColors.secondary, width: 3),
                       ),
-                      height: sizeh * 0.135,
+                      height: sizeh * 0.15,
                       width: sizew * 0.6,
                       padding: EdgeInsets.all(16),
                       child: LineChart(
                         LineChartData(
+                          minX: 0,
+                          maxX: 6,
+                          minY: 0,
+                          maxY: 1,
                           gridData: FlGridData(show: false),
                           borderData: FlBorderData(show: false),
                           titlesData: FlTitlesData(
                             show: true,
                             bottomTitles: AxisTitles(
                                 sideTitles: SideTitles(
+                              reservedSize: 22,
                               showTitles: true,
+                              interval: 1,
                               getTitlesWidget: (value, meta) {
-                                const style = TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                );
+                                TextStyle style = TextStyles.bodyBebas(context);
                                 switch (value.toInt()) {
                                   case 0:
                                     return Text('Mon', style: style);
@@ -99,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                                   case 6:
                                     return Text('Sun', style: style);
                                   default:
-                                    return Text('', style: style);
+                                    return Container(); // Return an empty container for out of range values
                                 }
                               },
                             )),
@@ -123,6 +125,8 @@ class _HomePageState extends State<HomePage> {
                               dotData: FlDotData(
                                 show: false,
                               ),
+                              barWidth: 5,
+                              isStrokeCapRound: true,
                               isCurved: true,
                               color: AppColors.complementary,
                               belowBarData: BarAreaData(

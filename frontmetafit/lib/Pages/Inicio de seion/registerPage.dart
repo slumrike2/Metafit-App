@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontmetafit/Components/TextDropDownInput.dart';
+
 import 'package:frontmetafit/Components/TextInput.dart';
 import 'package:frontmetafit/Components/PasswordRequirement.dart';
 import 'package:frontmetafit/const.dart';
@@ -19,6 +19,12 @@ class _registerPageState extends State<registerPage> {
   dynamic password;
   String gender = 'M';
   final GlobalKey<FormBuilderState> _fbkey = GlobalKey<FormBuilderState>();
+
+  @override
+  void dispose() {
+    _fbkey.currentState?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -157,116 +163,168 @@ class _registerPageState extends State<registerPage> {
                   },
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(
-                    vertical: sizeh * 0.02,
-                  ),
+                  padding: EdgeInsets.all(sizew * 0.03),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        width: sizew * 0.4,
-                        child: FormBuilderDateTimePicker(
-                          name: 'date',
-                          textAlign: TextAlign.center,
-                          inputType: InputType.date,
-                          style: TextStyle(color: AppColors.complementary),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(
-                                color: AppColors.secondary,
-                                width: 3,
-                              ),
+                      Column(
+                        children: [
+                          Container(
+                            width: sizew * 0.4,
+                            child: Text(
+                              'Date of Birth',
+                              style: TextStyle(color: AppColors.complementary),
                             ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(
-                                color: AppColors.secondary,
-                                width: 3.0,
+                            padding: EdgeInsets.only(left: 16),
+                          ),
+                          Container(
+                            width: sizew * 0.4,
+                            child: FormBuilderDateTimePicker(
+                              name: 'date',
+                              textAlign: TextAlign.center,
+                              inputType: InputType.date,
+                              style: TextStyle(color: AppColors.complementary),
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(
+                                    color: AppColors.secondary,
+                                    width: 3,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(
+                                    color: AppColors.secondary,
+                                    width: 3.0,
+                                  ),
+                                ),
+                                fillColor: AppColors.primaryDark,
+                                filled: true,
+                                labelStyle: TextStyle(
+                                  color: AppColors.complementary,
+                                ),
                               ),
-                            ),
-                            fillColor: AppColors.primaryDark,
-                            filled: true,
-                            labelStyle: TextStyle(
-                              color: AppColors.complementary,
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'This field is required';
+                                }
+                                return null;
+                              },
                             ),
                           ),
-                          validator: (value) {
-                            if (value == null) {
-                              return 'This field is required';
-                            }
-                            return null;
-                          },
-                        ),
+                        ],
                       ),
-                      Container(
-                        width: sizew * 0.4,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: AppColors.secondary, width: 3),
-                            borderRadius: BorderRadius.circular(20),
-                            color: AppColors.primaryDark),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  gender = 'M';
-                                });
-                              },
-                              style: TextButton.styleFrom(
-                                backgroundColor: gender == 'M'
-                                    ? AppColors.secondary
-                                    : AppColors.primaryDark,
-                              ),
-                              child: Text('M',
-                                  style: TextStyle(
-                                    color: AppColors.complementary,
-                                  )),
+                      Column(
+                        children: [
+                          Container(
+                            width: sizew * 0.4,
+                            child: Text(
+                              'Gender',
+                              style: TextStyle(color: AppColors.complementary),
                             ),
-                            Container(
-                              height: sizeh * 0.055,
-                              child: VerticalDivider(
-                                color: AppColors.secondary,
-                                thickness: 3,
-                              ),
+                            padding: EdgeInsets.only(left: 16),
+                          ),
+                          Container(
+                            width: sizew * 0.4,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: AppColors.secondary, width: 3),
+                                borderRadius: BorderRadius.circular(20),
+                                color: AppColors.primaryDark),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      gender = 'M';
+                                    });
+                                  },
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: gender == 'M'
+                                        ? AppColors.secondary
+                                        : AppColors.primaryDark,
+                                  ),
+                                  child: Text('M',
+                                      style: TextStyle(
+                                        color: AppColors.complementary,
+                                      )),
+                                ),
+                                Container(
+                                  height: sizeh * 0.055,
+                                  child: VerticalDivider(
+                                    color: AppColors.secondary,
+                                    thickness: 3,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      gender = 'F';
+                                    });
+                                  },
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: gender == 'F'
+                                        ? AppColors.secondary
+                                        : AppColors.primaryDark,
+                                  ),
+                                  child: Text('F',
+                                      style: TextStyle(
+                                        color: AppColors.complementary,
+                                      )),
+                                ),
+                              ],
                             ),
-                            TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  gender = 'F';
-                                });
-                              },
-                              style: TextButton.styleFrom(
-                                backgroundColor: gender == 'F'
-                                    ? AppColors.secondary
-                                    : AppColors.primaryDark,
-                              ),
-                              child: Text('F',
-                                  style: TextStyle(
-                                    color: AppColors.complementary,
-                                  )),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-                Container(
-                  width: sizew * 0.9,
-                  height: sizeh * 0.1,
-                  child: Textdropdowninput(
-                      label: 'Peso',
-                      nameText: 'peso',
-                      nameDropdown: 'medida',
-                      hintText: 'Peso',
-                      items: ['KG', 'LB'],
-                      onChanged: (value) {
-                        print(value);
-                      }),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: sizew * 0.45,
+                      child: Textinput(
+                        hintText: 'Peso',
+                        labelText: 'peso',
+                        name: 'peso',
+                        suffixText: 'kg',
+                        isNumeric: true,
+                        validation: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'This field is required';
+                          }
+                          if (value.length > 3) {
+                            return 'Value cannot exceed 3 digits';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    Container(
+                      width: sizew * 0.45,
+                      child: Textinput(
+                        hintText: 'Height',
+                        labelText: 'height',
+                        name: 'height',
+                        suffixText: 'cm',
+                        isNumeric: true,
+                        validation: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'This field is required';
+                          }
+                          if (value.length > 3) {
+                            return 'Value cannot exceed 3 digits';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 ConfirmButton(
                   onPressed: () {

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontmetafit/Pages/Routine/routinePreview.dart';
+
 import 'package:frontmetafit/const.dart';
 
 class RoutineWidget extends StatefulWidget {
@@ -24,17 +26,27 @@ class RoutineWidget extends StatefulWidget {
 }
 
 class _RoutineWidgetState extends State<RoutineWidget> {
+  void _navigateToNextPage(BuildContext context) {
+    Navigator.pushNamed(
+        context,
+        Routinepreview
+            .routeName // Reemplaza NextPage con la página a la que deseas navegar
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final sizew = MediaQuery.of(context).size.width;
     final sizeh = MediaQuery.of(context).size.height;
 
-    return Stack(
+    return GestureDetector(
+      onTap: () => _navigateToNextPage(context),
+      child: Stack(
         alignment: AlignmentDirectional.topEnd,
         clipBehavior: Clip.none,
         children: [
           Container(
-            height: sizeh * 0.2,
+            height: sizeh * 0.175,
             width: sizew * 0.9,
             padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
@@ -88,8 +100,7 @@ class _RoutineWidgetState extends State<RoutineWidget> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Center(
-                          child: Text(
-                              '${widget.cantExercises} exercises',
+                          child: Text('${widget.cantExercises} exercises',
                               style: TextStyles.bodyBebas(context))),
                     ),
                     Container(
@@ -115,7 +126,7 @@ class _RoutineWidgetState extends State<RoutineWidget> {
               width: 75,
               height: 75,
               decoration: BoxDecoration(
-                color: AppColors.primaryDark,
+                color: AppColors.primary,
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: AppColors.secondary,
@@ -125,11 +136,13 @@ class _RoutineWidgetState extends State<RoutineWidget> {
               child: Center(
                 child: Text(
                   widget.percentage,
-                  style: TextStyles.headline3(context),
+                  style: TextStyles.headline1(context),
                 ),
               ),
             ),
           ),
-        ]);
+        ],
+      ),
+    );
   }
 }

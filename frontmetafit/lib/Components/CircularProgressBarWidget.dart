@@ -50,58 +50,82 @@ class _CircularProgressBarWidgetState extends State<CircularProgressBarWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: widget.size * 0.45,
-      height: widget.size * 0.45,
-      decoration: BoxDecoration(
-        color: AppColors.primaryDark,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: AppColors.secondary,
-          width: 3,
-        ),
-      ),
-      padding: EdgeInsets.all(10),
-      child: Stack(
-        children: [
-          Center(
-            child: Opacity(
-              opacity: 0.5, // Reduce opacity to make it look like a shadow
-              child: SizedBox(
-                width: widget.size * 0.3,
-                height: widget.size * 0.3,
-                child: CircularProgressIndicator(
-                  value: _animation.value,
-                  strokeWidth: 25,
-                  backgroundColor: Colors.transparent,
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.tertiary),
-                  strokeCap: StrokeCap.round,
-                  strokeAlign: 0.1,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: widget.size,
+          height: widget.size,
+          decoration: BoxDecoration(
+            color: AppColors.primaryDark,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: AppColors.secondary,
+              width: 3,
+            ),
+          ),
+          padding: EdgeInsets.all(8),
+          child: Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Center(
+                        child: Opacity(
+                          opacity:
+                              0.5, // Reduce opacity to make it look like a shadow
+                          child: SizedBox(
+                            width: widget.size * 0.55,
+                            height: widget.size * 0.55,
+                            child: CircularProgressIndicator(
+                              value: _animation.value,
+                              strokeWidth: widget.size * 0.15,
+                              backgroundColor: Colors.transparent,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppColors.tertiary),
+                              strokeCap: StrokeCap.round,
+                              strokeAlign: 0.1,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: SizedBox(
+                          width: widget.size * 0.55,
+                          height: widget.size * 0.55,
+                          child: CircularProgressIndicator(
+                            value: _animation.value,
+                            strokeWidth: widget.size * 0.1,
+                            backgroundColor: Colors.transparent,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                AppColors.complementary),
+                            strokeCap: StrokeCap.round,
+                            strokeAlign: 0.2,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                            '${(_animation.value * 100).toStringAsFixed(0)}%',
+                            style: TextStyles.headline3(context)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+              if (widget.text.isNotEmpty)
+                Text(
+                  widget.text,
+                  style: TextStyles.headline3(context),
+                  textAlign: TextAlign.center,
+                ),
+            ],
           ),
-          Center(
-            child: SizedBox(
-              width: widget.size * 0.3,
-              height: widget.size * 0.3,
-              child: CircularProgressIndicator(
-                value: _animation.value,
-                strokeWidth: 15,
-                backgroundColor: Colors.transparent,
-                valueColor:
-                    AlwaysStoppedAnimation<Color>(AppColors.complementary),
-                strokeCap: StrokeCap.round,
-                strokeAlign: 0.2,
-              ),
-            ),
-          ),
-          Center(
-            child: Text('${(_animation.value * 100).toStringAsFixed(0)}%',
-                style: TextStyles.headline3(context)),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
