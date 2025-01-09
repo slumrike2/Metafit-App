@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontmetafit/Components/SumaryWidget.dart';
 
 class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
+
   @override
   State<SettingsPage> createState() => _SettingsPageState();
 }

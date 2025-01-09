@@ -7,7 +7,7 @@ import 'package:frontmetafit/const.dart';
 
 class Screen extends StatefulWidget {
   static const String routeName = '/pantalla';
-  const Screen({Key? key});
+  const Screen({super.key});
 
   @override
   State<Screen> createState() => _forgottenPasswordState();

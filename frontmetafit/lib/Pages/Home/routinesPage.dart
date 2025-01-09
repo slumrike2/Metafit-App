@@ -4,6 +4,8 @@ import 'package:frontmetafit/Components/RoutineWidget.dart';
 import 'package:frontmetafit/const.dart';
 
 class RoutinesPage extends StatefulWidget {
+  const RoutinesPage({super.key});
+
   @override
   State<RoutinesPage> createState() => _RoutinesPageState();
 }

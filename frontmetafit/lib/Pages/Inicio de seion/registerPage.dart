@@ -9,7 +9,7 @@ import '../../Components/ConfirmButton.dart';
 
 class registerPage extends StatefulWidget {
   static const String routeName = '/register';
-  const registerPage({Key? key}) : super(key: key);
+  const registerPage({super.key});
 
   @override
   State<registerPage> createState() => _registerPageState();
@@ -171,13 +171,13 @@ class _registerPageState extends State<registerPage> {
                         children: [
                           Container(
                             width: sizew * 0.4,
+                            padding: EdgeInsets.only(left: 8),
                             child: Text(
                               'Date of Birth',
                               style: TextStyle(color: AppColors.complementary),
                             ),
-                            padding: EdgeInsets.only(left: 16),
                           ),
-                          Container(
+                          SizedBox(
                             width: sizew * 0.4,
                             child: FormBuilderDateTimePicker(
                               name: 'date',
@@ -219,11 +219,11 @@ class _registerPageState extends State<registerPage> {
                         children: [
                           Container(
                             width: sizew * 0.4,
+                            padding: EdgeInsets.only(left: 8),
                             child: Text(
                               'Gender',
                               style: TextStyle(color: AppColors.complementary),
                             ),
-                            padding: EdgeInsets.only(left: 16),
                           ),
                           Container(
                             width: sizew * 0.4,
@@ -252,7 +252,7 @@ class _registerPageState extends State<registerPage> {
                                         color: AppColors.complementary,
                                       )),
                                 ),
-                                Container(
+                                SizedBox(
                                   height: sizeh * 0.055,
                                   child: VerticalDivider(
                                     color: AppColors.secondary,
@@ -286,13 +286,13 @@ class _registerPageState extends State<registerPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
+                    SizedBox(
                       width: sizew * 0.45,
                       child: Textinput(
                         hintText: 'Peso',
-                        labelText: 'peso',
+                        labelText: 'Peso',
                         name: 'peso',
-                        suffixText: 'kg',
+                        suffixText: 'lbs',
                         isNumeric: true,
                         validation: (value) {
                           if (value == null || value.isEmpty) {
@@ -305,13 +305,13 @@ class _registerPageState extends State<registerPage> {
                         },
                       ),
                     ),
-                    Container(
+                    SizedBox(
                       width: sizew * 0.45,
                       child: Textinput(
                         hintText: 'Height',
-                        labelText: 'height',
+                        labelText: 'Height',
                         name: 'height',
-                        suffixText: 'cm',
+                        suffixText: 'fts',
                         isNumeric: true,
                         validation: (value) {
                           if (value == null || value.isEmpty) {
@@ -325,6 +325,96 @@ class _registerPageState extends State<registerPage> {
                       ),
                     ),
                   ],
+                ),
+                Container(
+                  padding: EdgeInsets.all(sizew * 0.03),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          'Goals',
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      FormBuilderDropdown(
+                        iconEnabledColor: AppColors.complementary,
+                        dropdownColor: AppColors.secondary,
+                        hint: Text('goals'),
+                        focusColor: AppColors.secondary,
+                        name: 'goals',
+                        validator: (value) {
+                          if (value == null) {
+                            return 'This field is required';
+                          }
+                          return null;
+                        },
+                        items: [
+                          DropdownMenuItem(
+                            value: '1',
+                            child: Text('Lose Weight'),
+                          ),
+                          DropdownMenuItem(
+                            value: '2',
+                            child: Text('Gain Muscle'),
+                          ),
+                          DropdownMenuItem(
+                            value: '3',
+                            child: Text('Maintain Weight'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(sizew * 0.03),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          'Experience',
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      FormBuilderDropdown(
+                        dropdownColor: AppColors.secondary,
+                        hint: Text('Experience'),
+                        focusColor: AppColors.secondary,
+                        name: 'exp',
+                        validator: (value) {
+                          if (value == null ||
+                              value.isEmpty ||
+                              value == '' ||
+                              value == '0') {
+                            return 'This field is required';
+                          }
+                          return null;
+                        },
+                        items: [
+                          DropdownMenuItem(
+                            value: '1',
+                            child: Text('Lose Weight'),
+                          ),
+                          DropdownMenuItem(
+                            value: '2',
+                            child: Text('Gain Muscle'),
+                          ),
+                          DropdownMenuItem(
+                            value: '3',
+                            child: Text('Maintain Weight'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 ConfirmButton(
                   onPressed: () {

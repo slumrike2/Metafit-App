@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontmetafit/Pages/Routine/selectVariantExercise.dart';
 import 'package:frontmetafit/const.dart';
 
-class Exercisewidget extends StatelessWidget {
+class Exercisewidget extends StatefulWidget {
   final int reps;
   final int sets;
   final double time;
@@ -9,6 +10,9 @@ class Exercisewidget extends StatelessWidget {
   final String name;
   final String difficulty;
   final String description;
+  bool? showSelectButton;
+  bool? isSelected;
+  final void Function()? getName;
 
   Exercisewidget({
     super.key,
@@ -19,8 +23,16 @@ class Exercisewidget extends StatelessWidget {
     required this.difficulty,
     required this.description,
     this.time = 0,
+    this.showSelectButton = false,
+    this.isSelected = true,
+    this.getName,
   });
 
+  @override
+  State<Exercisewidget> createState() => _ExercisewidgetState();
+}
+
+class _ExercisewidgetState extends State<Exercisewidget> {
   @override
   Widget build(BuildContext context) {
     final sizeh = MediaQuery.of(context).size.height;
@@ -51,11 +63,24 @@ class Exercisewidget extends StatelessWidget {
                     'Exercise Widget',
                     style: TextStyles.headline1(context),
                   ),
-                  IconButton(
-                      onPressed: () {
-                        print('hola');
-                      },
-                      icon: Icon(Icons.arrow_circle_right))
+                  widget.showSelectButton ?? false
+                      ? IconButton(
+                          onPressed: () {
+                            print('Seleccionar');
+                            if (widget.getName != null) {
+                              widget.getName!();
+                            }
+                          },
+                          icon: widget.isSelected ?? false
+                              ? Icon(Icons.check_circle, color: Colors.green)
+                              : Icon(Icons.circle_outlined, color: Colors.grey))
+                      : IconButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, Selectvariantexercise.routeName);
+                          },
+                          icon: Icon(Icons.arrow_circle_right),
+                        ),
                 ],
               ),
             ),
@@ -80,9 +105,9 @@ class Exercisewidget extends StatelessWidget {
                   ),
                   child: Center(
                       child: Text(
-                          time > 0
-                              ? time.toString() + ' SEC'
-                              : reps.toString() + ' REPS',
+                          widget.time > 0
+                              ? '${widget.time} SEC'
+                              : '${widget.reps} REPS',
                           style: TextStyles.bodyBebas(context))),
                 ),
                 Container(
@@ -93,7 +118,7 @@ class Exercisewidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
-                      child: Text(equipment,
+                      child: Text(widget.equipment,
                           style: TextStyles.bodyBebas(context))),
                 ),
                 Container(
@@ -104,7 +129,7 @@ class Exercisewidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
-                      child: Text(difficulty,
+                      child: Text(widget.difficulty,
                           style: TextStyles.bodyBebas(context))),
                 ),
               ],
@@ -127,9 +152,9 @@ class Exercisewidget extends StatelessWidget {
             width: 2,
           ),
         ),
-        child: Text('$sets SETS',
+        child: Text('${widget.sets} SETS',
             style: TextStyles.headline3(context), textAlign: TextAlign.center),
-      )
+      ),
     ]);
   }
 }

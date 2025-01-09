@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontmetafit/Pages/Home/Screen.dart';
 import 'package:frontmetafit/Pages/Routine/doRoutine.dart';
 import 'package:frontmetafit/Pages/Routine/routinePreview.dart';
+import 'package:frontmetafit/Pages/Routine/selectVariantExercise.dart';
 
 import 'Pages/Inicio de seion/forgottenPassword.dart';
 import 'const.dart';
@@ -68,6 +69,8 @@ class MyApp extends StatelessWidget {
         forgottenPassword.routeName: (context) => const forgottenPassword(),
         Screen.routeName: (context) => const Screen(),
         Routinepreview.routeName: (context) => const Routinepreview(),
+        Selectvariantexercise.routeName: (context) =>
+            const Selectvariantexercise(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == Doroutine.routeName) {
@@ -84,7 +87,6 @@ class MyApp extends StatelessWidget {
         return null;
       },
       initialRoute: LoginPage.routeName,
-      
     );
   }
 }

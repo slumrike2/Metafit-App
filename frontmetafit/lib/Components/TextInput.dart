@@ -3,6 +3,11 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:frontmetafit/const.dart';
 import 'package:flutter/services.dart';
 
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
+}
+
 class Textinput extends StatelessWidget {
   final String hintText;
   final String labelText;
@@ -54,9 +59,8 @@ class Textinput extends StatelessWidget {
             },
             onChanged: onchangue,
             keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
-            inputFormatters: isNumeric
-                ? [FilteringTextInputFormatter.digitsOnly]
-                : [],
+            inputFormatters:
+                isNumeric ? [FilteringTextInputFormatter.digitsOnly] : [],
             decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),

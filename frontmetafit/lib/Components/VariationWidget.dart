@@ -92,8 +92,8 @@ class _VariationWidgetState extends State<VariationWidget> {
                   child: Center(
                       child: Text(
                           widget.time > 0
-                              ? widget.time.toString() + ' SEC'
-                              : widget.reps.toString() + ' REPS',
+                              ? '${widget.time} SEC'
+                              : '${widget.reps} REPS',
                           style: TextStyles.bodyBebas(context))),
                 ),
                 Container(

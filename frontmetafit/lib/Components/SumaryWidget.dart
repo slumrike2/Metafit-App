@@ -28,7 +28,7 @@ class SumaryWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
+            SizedBox(
               width: double.infinity,
               child: Text('Sumary',
                   textAlign: TextAlign.start,

@@ -12,7 +12,8 @@ class Excersiceexpanded extends StatefulWidget {
     required this.series,
     required this.reps,
     this.timer = true,
-  }) : time = 0;
+    this.time = 0,
+  });
 
   final String name;
   final String description;
@@ -40,7 +41,7 @@ class _ExcersiceexpandedState extends State<Excersiceexpanded> {
           Container(
             height: sizeh * 0.7,
             width: double.infinity,
-            margin: EdgeInsets.only(top: sizeh * 0.06 - 2),
+            margin: EdgeInsets.only(top: sizeh * 0.05 - 2),
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: AppColors.primaryDark,
@@ -76,7 +77,7 @@ class _ExcersiceexpandedState extends State<Excersiceexpanded> {
               constraints: BoxConstraints(
                 maxWidth: MediaQuery.of(context).size.width * 0.6,
               ),
-              height: sizeh * 0.06,
+              height: sizeh * 0.05,
               padding: EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                 color: AppColors.primaryDark,
@@ -101,8 +102,8 @@ class _ExcersiceexpandedState extends State<Excersiceexpanded> {
               ),
               child: Text(
                 widget.name,
-                textAlign: TextAlign.center,
-                style: TextStyles.headline2(context),
+                textAlign: TextAlign.start,
+                style: TextStyles.headline1(context),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -112,7 +113,7 @@ class _ExcersiceexpandedState extends State<Excersiceexpanded> {
               top: 0,
               right: 0,
               child: Container(
-                height: sizeh * 0.06,
+                height: sizeh * 0.05,
                 padding: EdgeInsets.symmetric(horizontal: 8),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -144,12 +145,12 @@ class _ExcersiceexpandedState extends State<Excersiceexpanded> {
           Text(
             text,
             textAlign: TextAlign.start,
-            style: TextStyles.headline3(context),
+            style: TextStyles.headline2(context),
           ),
           Text(
             value,
             textAlign: TextAlign.start,
-            style: TextStyles.bodyMonse(context),
+            style: TextStyles.subtitle(context),
           ),
         ],
       ),

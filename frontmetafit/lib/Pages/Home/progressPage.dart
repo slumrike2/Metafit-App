@@ -4,6 +4,8 @@ import 'package:frontmetafit/Components/CircularProgressBarWidget.dart';
 import 'package:frontmetafit/const.dart';
 
 class ProgressPage extends StatefulWidget {
+  const ProgressPage({super.key});
+
   @override
   State<ProgressPage> createState() => _ProgressPageState();
 }
