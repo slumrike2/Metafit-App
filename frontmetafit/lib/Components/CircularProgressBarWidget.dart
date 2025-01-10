@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:frontmetafit/const.dart';
 
@@ -6,11 +8,14 @@ class CircularProgressBarWidget extends StatefulWidget {
   final double size;
   final String text;
 
+  final bool countdown;
+
   const CircularProgressBarWidget({
     super.key,
     required this.percentage,
     required this.size,
     this.text = '',
+    this.countdown = false,
   });
 
   @override
@@ -24,26 +29,45 @@ class _CircularProgressBarWidgetState extends State<CircularProgressBarWidget>
   late AnimationController _controller;
   late Animation<double> _animation;
 
+  late Timer _timer;
+
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    );
-    _animation = Tween<double>(begin: 0, end: widget.percentage).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInOutCirc,
-      ),
-    )..addListener(() {
-        setState(() {});
-      });
-    _controller.forward();
+    if (widget.countdown) {
+      _controller = AnimationController(
+        duration: const Duration(seconds: 60),
+        vsync: this,
+      );
+      _animation = Tween<double>(begin: 0, end: 1).animate(
+        CurvedAnimation(
+          parent: _controller,
+          curve: Curves.linear,
+        ),
+      )..addListener(() {
+          setState(() {});
+        });
+      _controller.forward();
+    } else {
+      _controller = AnimationController(
+        duration: const Duration(seconds: 2),
+        vsync: this,
+      );
+      _animation = Tween<double>(begin: 0, end: widget.percentage).animate(
+        CurvedAnimation(
+          parent: _controller,
+          curve: Curves.easeInOutCirc,
+        ),
+      )..addListener(() {
+          setState(() {});
+        });
+      _controller.forward();
+    }
   }
 
   @override
   void dispose() {
+    print("Dispose");
     _controller.dispose();
     super.dispose();
   }
@@ -108,10 +132,14 @@ class _CircularProgressBarWidgetState extends State<CircularProgressBarWidget>
                         ),
                       ),
                       Center(
-                        child: Text(
-                            '${(_animation.value * 100).toStringAsFixed(0)}%',
-                            style: TextStyles.headline3(context)),
-                      ),
+                          child: Text(
+                        widget.countdown
+                            ? '${(60 - (_animation.value * 60)).toStringAsFixed(0)}s'
+                            : '${(_animation.value * 100).toStringAsFixed(0)}%',
+                        style: widget.countdown
+                            ? TextStyles.headline0(context)
+                            : TextStyles.headline2(context),
+                      )),
                     ],
                   ),
                 ),

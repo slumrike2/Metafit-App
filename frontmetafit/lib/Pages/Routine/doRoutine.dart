@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontmetafit/Components/ConfirmButton.dart';
 import 'package:frontmetafit/Components/ExcersiceExpanded.dart';
+import 'package:frontmetafit/Pages/Routine/Review.dart';
 
 class Doroutine extends StatefulWidget {
   const Doroutine({super.key, required this.name, required this.description});
@@ -55,49 +56,54 @@ class _DoroutineState extends State<Doroutine> {
   }
 
   void nextPage() {
-    if (currentPage < 3) {
+    if (currentPage < 5) {
       // Adjust the condition based on the number of pages
       _pageController.nextPage(
         duration: Duration(milliseconds: 300),
         curve: Curves.easeIn,
       );
       setTimerForCurrentPage();
+      return;
     }
+    Navigator.pop(context);
   }
 
   void setTimerForCurrentPage() {
-    final currentExercise = (currentPage == 0)
-        ? Excersiceexpanded(
-            name: 'dumbell alternate bicep curl',
-            description: 'no se que poner',
-            difficulty: 'dificil',
-            equipment: 'equipment',
-            muscles: 'muscles',
-            series: 4,
-            reps: 12,
-            time: 30)
-        : (currentPage == 1)
-            ? Excersiceexpanded(
-                name: 'push up',
-                description: 'no se que poner',
-                difficulty: 'medio',
-                equipment: 'none',
-                muscles: 'chest',
-                series: 3,
-                reps: 15,
-                time: 3)
-            : Excersiceexpanded(
-                name: 'squat',
-                description: 'no se que poner',
-                difficulty: 'facil',
-                equipment: 'none',
-                muscles: 'legs',
-                series: 4,
-                reps: 20,
-                time: 1);
-    setState(() {
-      remainingTime = currentExercise.time;
-    });
+    if (currentPage % 2 == 0) {
+      // Only set timer for exercise pages
+      final currentExercise = (currentPage == 0)
+          ? Excersiceexpanded(
+              name: 'dumbell alternate bicep curl',
+              description: 'no se que poner',
+              difficulty: 'dificil',
+              equipment: 'equipment',
+              muscles: 'muscles',
+              series: 4,
+              reps: 12,
+              time: 30)
+          : (currentPage == 2)
+              ? Excersiceexpanded(
+                  name: 'push up',
+                  description: 'no se que poner',
+                  difficulty: 'medio',
+                  equipment: 'none',
+                  muscles: 'chest',
+                  series: 3,
+                  reps: 15,
+                  time: 3)
+              : Excersiceexpanded(
+                  name: 'squat',
+                  description: 'no se que poner',
+                  difficulty: 'facil',
+                  equipment: 'none',
+                  muscles: 'legs',
+                  series: 4,
+                  reps: 20,
+                  time: 1);
+      setState(() {
+        remainingTime = currentExercise.time;
+      });
+    }
   }
 
   @override
@@ -150,6 +156,10 @@ class _DoroutineState extends State<Doroutine> {
                   series: 4,
                   reps: 12,
                   time: 30),
+              Review(
+                idExercise: 1,
+                idRoutine: 1,
+              ),
               Excersiceexpanded(
                   name: 'push up',
                   description: 'no se que poner',
@@ -159,6 +169,10 @@ class _DoroutineState extends State<Doroutine> {
                   series: 3,
                   reps: 15,
                   time: 120),
+              Review(
+                idExercise: 2,
+                idRoutine: 1,
+              ),
               Excersiceexpanded(
                   name: 'squat',
                   description: 'no se que poner',
@@ -168,7 +182,12 @@ class _DoroutineState extends State<Doroutine> {
                   series: 4,
                   reps: 20,
                   time: 60),
-              // Add more Excersiceexpanded widgets as needed
+              Review(
+                idExercise: 3,
+                idRoutine: 1,
+                isLast: true,
+              ),
+              // Add more Excersiceexpanded and ReviewPage widgets as needed
             ],
           ),
           Positioned(
@@ -176,21 +195,11 @@ class _DoroutineState extends State<Doroutine> {
             left: 0,
             right: 0,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: sizew * 0.25),
-              child: ConfirmButton(
-                  text: remainingTime == 0
-                      ? 'Next'
-                      : (isPaused ? 'Start' : 'Pause'),
-                  onPressed: () {
-                    if (remainingTime == 0) {
-                      nextPage();
-                    } else if (isPaused) {
-                      startTimer();
-                    } else {
-                      pauseTimer();
-                    }
-                  }),
-            ),
+                padding: EdgeInsets.symmetric(horizontal: sizew * 0.25),
+                child: ConfirmButton(
+                  text: 'Next',
+                  onPressed: () => nextPage(),
+                )),
           )
         ],
       ),
