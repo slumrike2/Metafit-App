@@ -2,25 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:frontmetafit/const.dart';
 
 class VariationWidget extends StatefulWidget {
-  final int reps;
-  final int sets;
-  final double time;
-  final String equipment;
-  final String name;
-  final String difficulty;
-  final String description;
-  bool selected;
+  final Map<String, dynamic> exercise;
+  final bool selected;
+  final VoidCallback onPressed;
 
   VariationWidget({
     super.key,
-    this.reps = 0,
-    required this.sets,
-    required this.equipment,
-    required this.name,
-    required this.difficulty,
-    required this.description,
-    this.time = 0,
+    required this.exercise,
     this.selected = false,
+    required this.onPressed,
   });
 
   @override
@@ -32,6 +22,10 @@ class _VariationWidgetState extends State<VariationWidget> {
   Widget build(BuildContext context) {
     final sizeh = MediaQuery.of(context).size.height;
     final sizew = MediaQuery.of(context).size.width;
+    final exerciseData = widget.exercise['exercises'];
+    final equipmentData = exerciseData['exercise_equipment']?.isNotEmpty == true
+        ? exerciseData['exercise_equipment'].first['equipment']
+        : null;
 
     return Stack(alignment: AlignmentDirectional.topEnd, children: [
       Container(
@@ -54,16 +48,16 @@ class _VariationWidgetState extends State<VariationWidget> {
               flex: 2,
               child: Row(
                 children: [
-                  Text(
-                    'Exercise Widget',
-                    style: TextStyles.headline1(context),
+                  Container(
+                    width: sizew * 0.6,
+                    child: Text(
+                      exerciseData['name'],
+                      style: TextStyles.headline1(context),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   IconButton(
-                      onPressed: () {
-                        setState(() {
-                          widget.selected = true;
-                        });
-                      },
+                      onPressed: widget.onPressed,
                       icon: Icon(widget.selected
                           ? Icons.circle
                           : Icons.circle_outlined))
@@ -73,14 +67,13 @@ class _VariationWidgetState extends State<VariationWidget> {
             Expanded(
               flex: 2,
               child: Text(
-                'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit voluptate velit esse cillum dolore fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt culpa qui officia deserunt mollit anim id est laborum',
+                exerciseData['description'],
                 overflow: TextOverflow.fade,
                 style: TextStyles.bodyMonseSmall(context),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              spacing: 7.5,
               children: [
                 Container(
                   width: sizew * 0.2,
@@ -90,10 +83,21 @@ class _VariationWidgetState extends State<VariationWidget> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
+                      child: Text('${widget.exercise['reps']} REPS',
+                          style: TextStyles.bodyBebas(context))),
+                ),
+                Container(
+                  width: sizew * 0.2,
+                  height: sizeh * 0.03,
+                  decoration: BoxDecoration(
+                    color: AppColors.secondary,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Center(
                       child: Text(
-                          widget.time > 0
-                              ? '${widget.time} SEC'
-                              : '${widget.reps} REPS',
+                          equipmentData != null
+                              ? equipmentData['name']
+                              : 'body Only',
                           style: TextStyles.bodyBebas(context))),
                 ),
                 Container(
@@ -104,18 +108,7 @@ class _VariationWidgetState extends State<VariationWidget> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
-                      child: Text(widget.equipment,
-                          style: TextStyles.bodyBebas(context))),
-                ),
-                Container(
-                  width: sizew * 0.2,
-                  height: sizeh * 0.03,
-                  decoration: BoxDecoration(
-                    color: AppColors.secondary,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Center(
-                      child: Text(widget.difficulty,
+                      child: Text(exerciseData['difficulty'],
                           style: TextStyles.bodyBebas(context))),
                 ),
               ],
@@ -138,7 +131,7 @@ class _VariationWidgetState extends State<VariationWidget> {
             width: 2,
           ),
         ),
-        child: Text('${widget.sets} SETS',
+        child: Text('${widget.exercise['sets']} SETS',
             style: TextStyles.headline3(context), textAlign: TextAlign.center),
       )
     ]);

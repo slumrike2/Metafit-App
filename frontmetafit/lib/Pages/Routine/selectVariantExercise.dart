@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontmetafit/Components/ConfirmButton.dart';
 import 'package:frontmetafit/Components/ExerciseWidget.dart';
+import 'package:frontmetafit/Components/VariationWidget.dart';
 import 'package:frontmetafit/const.dart';
 
 class Selectvariantexercise extends StatefulWidget {
@@ -12,17 +13,23 @@ class Selectvariantexercise extends StatefulWidget {
 }
 
 class _SelectvariantexerciseState extends State<Selectvariantexercise> {
-  String selectedExercise = '';
+  Map<String, dynamic>? selectedExercise;
 
-  void selectExercise(String name) {
+  void selectExercise(Map<String, dynamic> exercise) {
     setState(() {
-      selectedExercise = name;
+      selectedExercise = exercise;
+      print(selectedExercise);
     });
   }
 
+ 
   @override
   Widget build(BuildContext context) {
     final sizew = MediaQuery.of(context).size.width;
+    final exercises =
+        ModalRoute.of(context)!.settings.arguments as List<dynamic>;
+    final filteredExercises =
+        exercises.where((exercise) => exercise['option'] != 1).toList();
 
     return Scaffold(
         appBar: AppBar(),
@@ -32,46 +39,12 @@ class _SelectvariantexerciseState extends State<Selectvariantexercise> {
               spacing: 16,
               children: [
                 Text('Variants', style: TextStyles.headline1(context)),
-                Exercisewidget(
-                  sets: 12,
-                  equipment: 'none',
-                  name: 'Exercise 1',
-                  difficulty: 'hard',
-                  description: 'Description for Exercise 1',
-                  showSelectButton: true,
-                  isSelected: selectedExercise == 'Exercise 1',
-                  getName: () {
-                    selectExercise('Exercise 1');
-                    print('Exercisewidget name: Exercise 1');
-                    return;
-                  },
-                ),
-                Exercisewidget(
-                  sets: 10,
-                  equipment: 'dumbbells',
-                  name: 'Exercise 2',
-                  difficulty: 'medium',
-                  description: 'Description for Exercise 2',
-                  showSelectButton: true,
-                  isSelected: selectedExercise == 'Exercise 2',
-                  getName: () {
-                    selectExercise('Exercise 2');
-                    print('Exercisewidget name: Exercise 2');
-                  },
-                ),
-                Exercisewidget(
-                  sets: 8,
-                  equipment: 'barbell',
-                  name: 'Exercise 3',
-                  difficulty: 'easy',
-                  description: 'Description for Exercise 3',
-                  showSelectButton: true,
-                  isSelected: selectedExercise == 'Exercise 3',
-                  getName: () {
-                    selectExercise('Exercise 3');
-                    print('Exercisewidget name: Exercise 3');
-                  },
-                ),
+                for (var exercise in filteredExercises)
+                  VariationWidget(
+                    exercise: exercise,
+                    selected: selectedExercise == exercise,
+                    onPressed: () => selectExercise(exercise),
+                  ),
               ],
             ),
             Positioned(
@@ -81,8 +54,27 @@ class _SelectvariantexerciseState extends State<Selectvariantexercise> {
               child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: sizew * 0.25),
                   child: ConfirmButton(
-                      text: 'Changue',
-                      onPressed: () => Navigator.pop(context))),
+                      text: 'Change',
+                      onPressed: () {
+                        if (selectedExercise != null) {
+                          final selectedExerciseIndex =
+                              exercises.indexOf(selectedExercise);
+
+                          // Set the selected exercise option to 1
+                          exercises[selectedExerciseIndex]['option'] = 1;
+
+                          // Update all other options
+                          int optionCounter = 2;
+                          for (var i = 0; i < exercises.length; i++) {
+                            if (i != selectedExerciseIndex) {
+                              exercises[i]['option'] = optionCounter;
+                              optionCounter++;
+                            }
+                          }
+
+                          Navigator.pop(context, exercises);
+                        }
+                      })),
             )
           ]),
         ));

@@ -36,6 +36,9 @@ class _ReviewState extends State<Review> {
           widget.isLast
               ? (Ratingwidget(
                   tittle: "Routine Difficulty",
+                  idWidget: widget.idExercise,
+                  idRoutine: widget.idRoutine,
+                  type: Type.Routine_Difficulty,
                 ))
               : CircularProgressBarWidget(
                   percentage: 0.7,
@@ -45,10 +48,16 @@ class _ReviewState extends State<Review> {
           widget.isLast
               ? Ratingwidget(
                   tittle: "Rutine rating",
+                  idWidget: widget.idExercise,
+                  idRoutine: widget.idRoutine,
+                  type: Type.Routine_Rating,
                 )
               : Container(),
           Ratingwidget(
             tittle: "exercise rating",
+            idWidget: widget.idExercise,
+            idRoutine: widget.idRoutine,
+            type: Type.Exercise,
           ),
         ],
       ),

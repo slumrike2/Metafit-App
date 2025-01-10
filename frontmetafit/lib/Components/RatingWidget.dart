@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:frontmetafit/const.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+// Define the enum Type
+enum Type {
+  Exercise,
+  Routine_Difficulty,
+  Routine_Rating,
+}
 
 class Ratingwidget extends StatefulWidget {
-  const Ratingwidget({super.key, required this.tittle});
+  const Ratingwidget(
+      {super.key,
+      required this.tittle,
+      required this.idWidget,
+      required this.idRoutine,
+      required this.type});
 
   final String tittle;
+  final int idWidget;
+  final int idRoutine;
+  final Type type; // Change type to use the enum
 
   @override
   _RatingwidgetState createState() => _RatingwidgetState();
@@ -12,16 +28,45 @@ class Ratingwidget extends StatefulWidget {
 
 class _RatingwidgetState extends State<Ratingwidget> {
   double _currentRating = 0;
+  SupabaseClient supabase = Supabase.instance.client;
 
   @override
   void dispose() {
-    imprimir();
+    Save();
     super.dispose();
   }
 
-  imprimir() async {
-    await Future.delayed(Duration(seconds: 3));
-    print("Puntuacion a guardar: $_currentRating");
+  Save() async {
+    if (widget.type == Type.Exercise) {
+      try {
+        await supabase.from('workout_exercise_rating').upsert({
+          'workout_exercise_id': widget.idWidget,
+          'rating': _currentRating.toInt(),
+        });
+      } on Exception catch (e) {
+        print(e.toString());
+      }
+    } else if (widget.type == Type.Routine_Difficulty) {
+      try {
+        await supabase.from('workout_rating').upsert({
+          'workout_id': widget.idRoutine,
+          'difficulty_rating': _currentRating.toInt(),
+        });
+      } on Exception catch (e) {
+        print(e.toString());
+      }
+      // Save the rating for the routine difficulty
+    } else if (widget.type == Type.Routine_Rating) {
+      try {
+        await supabase.from('workout_rating').upsert({
+          'workout_id': widget.idRoutine,
+          'routine_rating': _currentRating.toInt(),
+        });
+      } on Exception catch (e) {
+        print(e.toString());
+      }
+      // Save the rating for the routine
+    }
   }
 
   @override
@@ -43,7 +88,7 @@ class _RatingwidgetState extends State<Ratingwidget> {
             activeColor: AppColors.complementary,
             value: _currentRating,
             min: 0,
-            max: 1,
+            max: 5,
             divisions: 5,
             onChanged: (double value) {
               setState(() {

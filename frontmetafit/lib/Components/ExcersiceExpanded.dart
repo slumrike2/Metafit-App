@@ -55,20 +55,20 @@ class _ExcersiceexpandedState extends State<Excersiceexpanded> {
                 width: 2,
               ),
             ),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Expanded(
-                  child:
-                      TextContent(context, 'Description', widget.description)),
-              Expanded(
-                  child: TextContent(context, 'Difficulty', widget.difficulty)),
-              Expanded(
-                  child: TextContent(context, 'Equipment', widget.equipment)),
-              Expanded(child: TextContent(context, 'Muscles', widget.muscles)),
-              Expanded(
-                  child: TextContent(context, 'Series', '${widget.series}')),
-              Expanded(child: TextContent(context, 'Reps', '${widget.reps}')),
-            ]),
+            child: SingleChildScrollView(
+              child: Column(
+                spacing: 10,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextContent(context, 'Description', widget.description),
+                  TextContent(context, 'Difficulty', widget.difficulty),
+                  TextContent(context, 'Equipment', widget.equipment),
+                  TextContent(context, 'Muscles', widget.muscles),
+                  TextContent(context, 'Series', '${widget.series}'),
+                  TextContent(context, 'Reps', '${widget.reps}'),
+                ],
+              ),
+            ),
           ),
           Positioned(
             top: 0,
@@ -150,7 +150,7 @@ class _ExcersiceexpandedState extends State<Excersiceexpanded> {
           Text(
             value,
             textAlign: TextAlign.start,
-            style: TextStyles.subtitle(context),
+            style: TextStyles.bodyMonseSmall(context),
           ),
         ],
       ),

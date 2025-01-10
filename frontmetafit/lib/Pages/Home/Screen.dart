@@ -4,9 +4,10 @@ import 'package:frontmetafit/Pages/Home/routinesPage.dart';
 import 'package:frontmetafit/Pages/Home/progressPage.dart';
 import 'package:frontmetafit/Pages/Home/settingsPage.dart';
 import 'package:frontmetafit/const.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Screen extends StatefulWidget {
-  static const String routeName = '/pantalla';
+  static const String routeName = '/screen';
   const Screen({super.key});
 
   @override
@@ -15,6 +16,14 @@ class Screen extends StatefulWidget {
 
 // ignore: camel_case_types
 class _forgottenPasswordState extends State<Screen> {
+  SupabaseClient supabase = Supabase.instance.client;
+  String? userId;
+
+  initState() {
+    userId = supabase.auth.currentUser?.id;
+    super.initState();
+  }
+
   dynamic index = 0;
   final List<Widget> _children = [
     HomePage(),
@@ -23,8 +32,18 @@ class _forgottenPasswordState extends State<Screen> {
     SettingsPage(),
   ];
 
+  Future<String> _fetchUserName() async {
+    final response = await Supabase.instance.client
+        .from('users')
+        .select('full_name')
+        .eq('id', userId!)
+        .single();
+    return response['full_name'] as String;
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Add this line to call the super method
     final sizeh = MediaQuery.of(context).size.height;
     final sizew = MediaQuery.of(context).size.width;
 
@@ -70,10 +89,23 @@ class _forgottenPasswordState extends State<Screen> {
                   child: Container(
                     width: sizew * 0.7,
                     padding: const EdgeInsets.only(left: 16),
-                    child: Text(
-                      'Welcome back,\nJesus Alejandro',
-                      style: TextStyles.subtitle(context),
-                      overflow: TextOverflow.ellipsis,
+                    child: FutureBuilder<String>(
+                      future: _fetchUserName(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Text('Loading...',
+                              style: TextStyles.subtitle(context));
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          return Text(
+                            'Welcome back,\n${snapshot.data}',
+                            style: TextStyles.subtitle(context),
+                            overflow: TextOverflow.ellipsis,
+                          );
+                        }
+                      },
                     ),
                   ),
                 )

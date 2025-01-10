@@ -10,6 +10,7 @@ import 'Pages/Inicio de seion/loginPage.dart';
 import 'Pages/Inicio de seion/registerPage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'Pages/Routine/doRoutine.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -24,11 +25,12 @@ void main() async {
   await Supabase.initialize(
       url: supabaseUrl, anonKey: supabaseKey, debug: true);
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  SupabaseClient supabase = Supabase.instance.client;
+  MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -68,25 +70,21 @@ class MyApp extends StatelessWidget {
         registerPage.routeName: (context) => const registerPage(),
         forgottenPassword.routeName: (context) => const forgottenPassword(),
         Screen.routeName: (context) => const Screen(),
-        Routinepreview.routeName: (context) => const Routinepreview(),
+        Routinepreview.routeName: (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+          return Routinepreview(workoutData: args);
+        },
         Selectvariantexercise.routeName: (context) =>
             const Selectvariantexercise(),
-      },
-      onGenerateRoute: (settings) {
-        if (settings.name == Doroutine.routeName) {
-          final args = settings.arguments as Map<String, String>?;
-          return MaterialPageRoute(
-            builder: (context) {
-              return Doroutine(
-                name: args?['name'] ?? 'No Name',
-                description: args?['description'] ?? 'No Description',
-              );
-            },
-          );
+        Doroutine.routeName: (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+          return Doroutine(workoutData: args);
         }
-        return null;
       },
-      initialRoute: LoginPage.routeName,
+     
+      initialRoute: (supabase.auth.currentUser != null)
+          ? Screen.routeName
+          : LoginPage.routeName,
     );
   }
 }

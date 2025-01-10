@@ -6,6 +6,7 @@ import 'package:frontmetafit/Pages/Inicio%20de%20seion/registerPage.dart';
 import 'package:frontmetafit/const.dart';
 import '/Components/TextInput.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginPage extends StatefulWidget {
   static const String routeName = '/login';
@@ -17,6 +18,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormBuilderState> _fbkey = GlobalKey<FormBuilderState>();
+  SupabaseClient supabase = Supabase.instance.client;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -78,12 +81,46 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: Text('Forgot Password?')),
                 ),
-                ConfirmButton(
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, Screen.routeName);
-                  },
-                  text: 'Login',
-                ),
+                !isLoading
+                    ? ConfirmButton(
+                        onPressed: () async {
+                          if (_fbkey.currentState!.saveAndValidate()) {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            try {
+                              await supabase.auth.signInWithPassword(
+                                  email: _fbkey.currentState!.value['email']
+                                      .toString(),
+                                  password: _fbkey
+                                      .currentState!.value['password']
+                                      .toString());
+                              Navigator.pushReplacementNamed(
+                                  context, Screen.routeName);
+                            } catch (e) {
+                              if (e is AuthException && e.statusCode == '400') {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Invalid credentials'),
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('An error occurred'),
+                                  ),
+                                );
+                              }
+                            } finally {
+                              setState(() {
+                                isLoading = false;
+                              });
+                            }
+                          }
+                        },
+                        text: 'Login',
+                      )
+                    : CircularProgressIndicator(),
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

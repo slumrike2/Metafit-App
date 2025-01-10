@@ -67,7 +67,6 @@ class _CircularProgressBarWidgetState extends State<CircularProgressBarWidget>
 
   @override
   void dispose() {
-    print("Dispose");
     _controller.dispose();
     super.dispose();
   }

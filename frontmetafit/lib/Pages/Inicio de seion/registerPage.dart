@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:frontmetafit/Components/TextInput.dart';
 import 'package:frontmetafit/Components/PasswordRequirement.dart';
+import 'package:frontmetafit/Pages/Home/Screen.dart';
 import 'package:frontmetafit/const.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:intl/intl.dart';
 
 import '../../Components/ConfirmButton.dart';
 
@@ -17,8 +20,10 @@ class registerPage extends StatefulWidget {
 
 class _registerPageState extends State<registerPage> {
   dynamic password;
-  String gender = 'M';
+  String gender = 'male';
   final GlobalKey<FormBuilderState> _fbkey = GlobalKey<FormBuilderState>();
+  SupabaseClient supabase = Supabase.instance.client;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -239,11 +244,11 @@ class _registerPageState extends State<registerPage> {
                                 TextButton(
                                   onPressed: () {
                                     setState(() {
-                                      gender = 'M';
+                                      gender = 'male';
                                     });
                                   },
                                   style: TextButton.styleFrom(
-                                    backgroundColor: gender == 'M'
+                                    backgroundColor: gender == 'male'
                                         ? AppColors.secondary
                                         : AppColors.primaryDark,
                                   ),
@@ -262,11 +267,11 @@ class _registerPageState extends State<registerPage> {
                                 TextButton(
                                   onPressed: () {
                                     setState(() {
-                                      gender = 'F';
+                                      gender = 'female';
                                     });
                                   },
                                   style: TextButton.styleFrom(
-                                    backgroundColor: gender == 'F'
+                                    backgroundColor: gender == 'female'
                                         ? AppColors.secondary
                                         : AppColors.primaryDark,
                                   ),
@@ -354,15 +359,15 @@ class _registerPageState extends State<registerPage> {
                         },
                         items: [
                           DropdownMenuItem(
-                            value: '1',
+                            value: 'lose_weight',
                             child: Text('Lose Weight'),
                           ),
                           DropdownMenuItem(
-                            value: '2',
+                            value: 'gain_muscle',
                             child: Text('Gain Muscle'),
                           ),
                           DropdownMenuItem(
-                            value: '3',
+                            value: 'stay_fit',
                             child: Text('Maintain Weight'),
                           ),
                         ],
@@ -400,29 +405,133 @@ class _registerPageState extends State<registerPage> {
                         },
                         items: [
                           DropdownMenuItem(
-                            value: '1',
-                            child: Text('Lose Weight'),
+                            value: 'beginner',
+                            child: Text('Beginner'),
                           ),
                           DropdownMenuItem(
-                            value: '2',
-                            child: Text('Gain Muscle'),
+                            value: 'intermediate',
+                            child: Text('Intermediate'),
                           ),
                           DropdownMenuItem(
-                            value: '3',
-                            child: Text('Maintain Weight'),
+                            value: 'advanced',
+                            child: Text('Advanced'),
                           ),
                         ],
                       ),
                     ],
                   ),
                 ),
-                ConfirmButton(
-                  onPressed: () {
-                    if (_fbkey.currentState!.saveAndValidate()) {
-                      print(_fbkey.currentState!.value);
-                    }
-                  },
-                  text: 'Sign Up',
+                Container(
+                  padding: EdgeInsets.all(sizew * 0.03),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          'Where do workout?',
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      FormBuilderDropdown(
+                        dropdownColor: AppColors.secondary,
+                        hint: Text('Where do workout?'),
+                        focusColor: AppColors.secondary,
+                        name: 'location',
+                        validator: (value) {
+                          if (value == null ||
+                              value.isEmpty ||
+                              value == '' ||
+                              value == '0') {
+                            return 'This field is required';
+                          }
+                          return null;
+                        },
+                        items: [
+                          DropdownMenuItem(
+                            value: 'gym',
+                            child: Text('Gym'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'home',
+                            child: Text('Home'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: sizeh * 0.05),
+                  child: _isLoading
+                      ? CircularProgressIndicator()
+                      : ConfirmButton(
+                          onPressed: () async {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            if (!_fbkey.currentState!.saveAndValidate()) {
+                              setState(() {
+                                _isLoading = false;
+                              });
+                              return;
+                            }
+                            try {
+                              await supabase.auth.signUp(
+                                email: _fbkey
+                                    .currentState!.fields['email']!.value
+                                    .toString(),
+                                password: _fbkey
+                                    .currentState!.fields['password']!.value
+                                    .toString(),
+                              );
+
+                              print(gender);
+
+                              if (supabase.auth.currentUser != null) {
+                                await supabase.from('users').insert([
+                                  {
+                                    'id': supabase.auth.currentUser!.id,
+                                    'full_name': _fbkey
+                                        .currentState!.fields['name']!.value
+                                        .toString(),
+                                    'birth_date': _fbkey
+                                        .currentState!.fields['date']!.value
+                                        .toString(),
+                                    'gender': gender,
+                                    'height': _fbkey
+                                        .currentState!.fields['height']!.value
+                                        .toString(),
+                                    'weight': _fbkey
+                                        .currentState!.fields['peso']!.value
+                                        .toString(),
+                                    'experience': _fbkey
+                                        .currentState!.fields['exp']!.value
+                                        .toString(),
+                                    'goal': _fbkey
+                                        .currentState!.fields['goals']!.value
+                                        .toString(),
+                                    'location': _fbkey
+                                        .currentState!.fields['location']!.value
+                                        .toString(),
+                                  }
+                                ]);
+                                Navigator.pop(context);
+                                Navigator.pushReplacementNamed(
+                                    context, Screen.routeName);
+                              }
+                            } catch (e) {
+                              print(e.toString());
+                            } finally {
+                              setState(() {
+                                _isLoading = false;
+                              });
+                            }
+                          },
+                          text: 'Sign Up',
+                        ),
                 ),
               ],
             ),

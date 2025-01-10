@@ -5,12 +5,11 @@ import 'package:frontmetafit/Components/ExcersiceExpanded.dart';
 import 'package:frontmetafit/Pages/Routine/Review.dart';
 
 class Doroutine extends StatefulWidget {
-  const Doroutine({super.key, required this.name, required this.description});
+  const Doroutine({super.key, required this.workoutData});
 
   static const String routeName = '/DoRoutine';
 
-  final String name;
-  final String description;
+  final workoutData;
 
   @override
   State<Doroutine> createState() => _DoroutineState();
@@ -48,62 +47,17 @@ class _DoroutineState extends State<Doroutine> {
     });
   }
 
-  void pauseTimer() {
-    _timer?.cancel();
-    setState(() {
-      isPaused = true;
-    });
-  }
-
-  void nextPage() {
-    if (currentPage < 5) {
+  void nextPage(int aux) {
+    if (currentPage < aux) {
       // Adjust the condition based on the number of pages
       _pageController.nextPage(
         duration: Duration(milliseconds: 300),
         curve: Curves.easeIn,
       );
-      setTimerForCurrentPage();
       return;
     }
-    Navigator.pop(context);
-  }
 
-  void setTimerForCurrentPage() {
-    if (currentPage % 2 == 0) {
-      // Only set timer for exercise pages
-      final currentExercise = (currentPage == 0)
-          ? Excersiceexpanded(
-              name: 'dumbell alternate bicep curl',
-              description: 'no se que poner',
-              difficulty: 'dificil',
-              equipment: 'equipment',
-              muscles: 'muscles',
-              series: 4,
-              reps: 12,
-              time: 30)
-          : (currentPage == 2)
-              ? Excersiceexpanded(
-                  name: 'push up',
-                  description: 'no se que poner',
-                  difficulty: 'medio',
-                  equipment: 'none',
-                  muscles: 'chest',
-                  series: 3,
-                  reps: 15,
-                  time: 3)
-              : Excersiceexpanded(
-                  name: 'squat',
-                  description: 'no se que poner',
-                  difficulty: 'facil',
-                  equipment: 'none',
-                  muscles: 'legs',
-                  series: 4,
-                  reps: 20,
-                  time: 1);
-      setState(() {
-        remainingTime = currentExercise.time;
-      });
-    }
+    Navigator.pop(context);
   }
 
   @override
@@ -116,14 +70,20 @@ class _DoroutineState extends State<Doroutine> {
   @override
   Widget build(BuildContext context) {
     final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String>?;
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
 
     final sizew = MediaQuery.of(context).size.width;
     final sizeh = MediaQuery.of(context).size.height;
 
+    final workoutExercises = args?['workout_exercises'] as List<dynamic>? ?? [];
+    final realExercises = workoutExercises
+        .where((exercise) =>
+            exercise['exercises'] != null && exercise['option'] == 1)
+        .toList();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.name), // Use the widget's name property
+        // Use the widget's name property
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -143,51 +103,32 @@ class _DoroutineState extends State<Doroutine> {
             onPageChanged: (index) {
               setState(() {
                 currentPage = index;
-                setTimerForCurrentPage();
               });
             },
             children: [
-              Excersiceexpanded(
-                  name: 'dumbell alternate bicep curl',
-                  description: 'no se que poner',
-                  difficulty: 'dificil',
-                  equipment: 'equipment',
-                  muscles: 'muscles',
-                  series: 4,
-                  reps: 12,
-                  time: 30),
-              Review(
-                idExercise: 1,
-                idRoutine: 1,
-              ),
-              Excersiceexpanded(
-                  name: 'push up',
-                  description: 'no se que poner',
-                  difficulty: 'medio',
-                  equipment: 'none',
-                  muscles: 'chest',
-                  series: 3,
-                  reps: 15,
-                  time: 120),
-              Review(
-                idExercise: 2,
-                idRoutine: 1,
-              ),
-              Excersiceexpanded(
-                  name: 'squat',
-                  description: 'no se que poner',
-                  difficulty: 'facil',
-                  equipment: 'none',
-                  muscles: 'legs',
-                  series: 4,
-                  reps: 20,
-                  time: 60),
-              Review(
-                idExercise: 3,
-                idRoutine: 1,
-                isLast: true,
-              ),
-              // Add more Excersiceexpanded and ReviewPage widgets as needed
+              for (var i = 0; i < realExercises.length; i++) ...[
+                Excersiceexpanded(
+                  name: realExercises[i]['exercises']['name'],
+                  description: realExercises[i]['exercises']['description'],
+                  difficulty: realExercises[i]['exercises']['difficulty'],
+                  equipment: (realExercises[i]['exercises']
+                                  ['exercise_equipment'] !=
+                              null &&
+                          realExercises[i]['exercises']['exercise_equipment']
+                              .isNotEmpty)
+                      ? realExercises[i]['exercises']['exercise_equipment'][0]
+                          ['equipment']['name']
+                      : 'Body Only',
+                  muscles: realExercises[i]['muscles'] ?? 'none',
+                  series: realExercises[i]['sets'],
+                  reps: realExercises[i]['reps'],
+                ),
+                Review(
+                  idExercise: realExercises[i]['id'] ?? 1,
+                  idRoutine: args?['idRoutine'] ?? 1,
+                  isLast: i == realExercises.length - 1,
+                ),
+              ],
             ],
           ),
           Positioned(
@@ -198,7 +139,7 @@ class _DoroutineState extends State<Doroutine> {
                 padding: EdgeInsets.symmetric(horizontal: sizew * 0.25),
                 child: ConfirmButton(
                   text: 'Next',
-                  onPressed: () => nextPage(),
+                  onPressed: () => nextPage(realExercises.length * 2 - 1),
                 )),
           )
         ],
