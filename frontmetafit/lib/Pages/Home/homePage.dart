@@ -68,86 +68,73 @@ class _HomePageState extends State<HomePage>
   Future<void> fetchIdealWeight() async {
     final _fbkey = GlobalKey<FormBuilderState>();
 
-    final response = await supabase
-        .from('users')
-        .select('goal_weight')
-        .eq('id', userId!)
-        .single();
-
-    final data = response;
-    if (data == null || data['goal_weight'] == null) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(
-              'Set Your Ideal Weight',
-              style: TextStyles.headline1(context),
-            ),
-            content: FormBuilder(
-              key: _fbkey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  FormBuilderTextField(
-                    name: 'goal_weight',
-                    decoration: InputDecoration(labelText: 'Goal Weight'),
-                    keyboardType: TextInputType.number,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text('Cancel'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (_fbkey.currentState!.saveAndValidate()) {
-                            final idealWeight = _fbkey
-                                .currentState!.fields['goal_weight']!.value;
-                            await supabase.from('users').update(
-                                {'goal_weight': idealWeight}).eq('id', userId!);
-
-                            setState(() {
-                              _workoutData = fetchWorkoutData();
-                              _progressData = fetchProgressData();
-                              _historyData = fetchHistoryData();
-                            });
-                            Navigator.pop(context);
-                          }
-                        },
-                        child: Text('Save'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
-    }
-  }
-
-  Future<Map<String, dynamic>> fetchSummaryData() async {
     try {
-      final response = await Supabase.instance.client
-          .from('workouts')
-          .select('id')
-          .eq('user_id', userId!)
-          .eq('done', true)
+      final response = await supabase
+          .from('users')
+          .select('goal_weight')
+          .eq('id', userId!)
           .single();
+      final data = response;
 
-      final response2 = await http.get(Uri.parse(
-          'https://xjl0vrff-8000.use.devtunnels.ms/routine_summary?routine_uid=${response['id']}'));
+      if (data == null || data['goal_weight'] == null) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(
+                'Set Your Ideal Weight',
+                style: TextStyles.headline1(context),
+              ),
+              content: FormBuilder(
+                key: _fbkey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    FormBuilderTextField(
+                      name: 'goal_weight',
+                      decoration: InputDecoration(labelText: 'Goal Weight'),
+                      keyboardType: TextInputType.number,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('Cancel'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            if (_fbkey.currentState!.saveAndValidate()) {
+                              final idealWeight = _fbkey
+                                  .currentState!.fields['goal_weight']!.value;
+                              await supabase
+                                  .from('users')
+                                  .update({'goal_weight': idealWeight}).eq(
+                                      'id', userId!);
 
-      return response as Map<String, dynamic>;
-    } catch (e) {
-      print('Error fetching summary data: $e');
-      return {};
+                              setState(() {
+                                _workoutData = fetchWorkoutData();
+                                _progressData = fetchProgressData();
+                                _historyData = fetchHistoryData();
+                              });
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: Text('Save'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      }
+    } on Exception catch (e) {
+      print('Error fetching ideal weight: $e');
     }
   }
 
@@ -204,10 +191,10 @@ class _HomePageState extends State<HomePage>
                 } else {
                   final workouts = snapshot.data!;
                   final todayWorkoutsSorted = workouts
-                      .where((workout) => workout['recommendation'] != null)
+                      .where((workout) => workout['recomendation'] != null)
                       .toList()
                     ..sort((a, b) =>
-                        b['recommendation'].compareTo(a['recommendation']));
+                        b['recomendation'].compareTo(a['recomendation']));
                   final firstWorkout = todayWorkoutsSorted.isNotEmpty
                       ? todayWorkoutsSorted[0]
                       : workouts[0];
@@ -373,40 +360,16 @@ class _HomePageState extends State<HomePage>
                             ),
                           ],
                         ),
-                        FutureBuilder<Map<String, dynamic>>(
-                          future: fetchSummaryData(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return CircularProgressIndicator();
-                            } else if (snapshot.hasError) {
-                              print(snapshot.error);
-                              return Center(
-                                  child: Text('Error: ${snapshot.error}'));
-                            } else if (!snapshot.hasData) {
-                              return Center(child: Text('Loading summary...'));
-                            } else {
-                              final data = snapshot.data!;
-
-                              return SumaryWidget(
-                                data: [
-                                  ElementosSumary(
-                                      name: 'Name', value: data['name'] ?? 0),
-                                  ElementosSumary(
-                                      name: 'Email', value: data['email'] ?? 0),
-                                  ElementosSumary(
-                                      name: 'Shoulders',
-                                      value: data['shoulders'] ?? 0),
-                                  ElementosSumary(
-                                      name: 'Weight',
-                                      value: data['weight'] ?? 0),
-                                  ElementosSumary(
-                                      name: 'Height',
-                                      value: data['height'] ?? 0),
-                                ],
-                              );
-                            }
-                          },
+                        SumaryWidget(
+                          data: [
+                            ElementosSumary(name: 'Shoulders', value: 0),
+                            ElementosSumary(name: 'Chest', value: 0),
+                            ElementosSumary(name: 'Back', value: 0),
+                            ElementosSumary(name: 'Arms', value: 0),
+                            ElementosSumary(name: 'Legs', value: 0),
+                            ElementosSumary(name: 'Abs', value: 0),
+                            ElementosSumary(name: 'Neck', value: 0),
+                          ],
                         ),
                       ],
                     ),

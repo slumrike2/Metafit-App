@@ -66,9 +66,9 @@ class _SettingsPageState extends State<SettingsPage> {
       'title': 'Workouts',
       'icon': Icons.fitness_center,
       'action': (BuildContext context) async {
-        print('Getting workouts');
-        final response = await http.get(Uri.parse(
-            'https://xjl0vrff-8000.use.devtunnels.ms/gen_routine?user_uid=${Supabase.instance.client.auth.currentUser!.id}'));
+        // print('Getting workouts');
+        // final response = await http.get(Uri.parse(
+        //     'https://xjl0vrff-8000.use.devtunnels.ms/gen_routine?user_uid=${Supabase.instance.client.auth.currentUser!.id}'));
       },
     },
     {
