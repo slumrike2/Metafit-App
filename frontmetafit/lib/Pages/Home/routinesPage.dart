@@ -33,8 +33,8 @@ class _RoutinesPageState extends State<RoutinesPage> {
           .from('workouts')
           .select(
               '*, workout_exercises(*, exercises(*, exercise_muscle_groups(*,muscles(*)) ,exercise_equipment(*, equipment(*))))')
-          .eq('user_id', Supabase.instance.client.auth.currentUser!.id)
-          .eq('created_at', DateTime.now().toIso8601String().split('T').first);
+          .eq('user_id', Supabase.instance.client.auth.currentUser!.id);
+      //.eq('created_at', DateTime.now().toIso8601String().split('T').first);
 
       final data = response as List<dynamic>;
 

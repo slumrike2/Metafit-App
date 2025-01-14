@@ -7,6 +7,7 @@ import 'package:frontmetafit/Components/SumaryWidget.dart';
 import 'package:frontmetafit/const.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,9 +31,7 @@ class _HomePageState extends State<HomePage>
             .from('workouts')
             .select(
                 '*, workout_exercises(*, exercises(*, exercise_muscle_groups(*,muscles(*)) ,exercise_equipment(*, equipment(*))))')
-            .eq('user_id', userId!)
-            .eq('created_at',
-                DateTime.now().toIso8601String().split('T').first);
+            .eq('user_id', userId!);
 
         final data = response as List<dynamic>;
         if (data.isNotEmpty) {
@@ -130,6 +129,25 @@ class _HomePageState extends State<HomePage>
           );
         },
       );
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchSummaryData() async {
+    try {
+      final response = await Supabase.instance.client
+          .from('workouts')
+          .select('id')
+          .eq('user_id', userId!)
+          .eq('done', true)
+          .single();
+
+      final response2 = await http.get(Uri.parse(
+          'https://xjl0vrff-8000.use.devtunnels.ms/routine_summary?routine_uid=${response['id']}'));
+
+      return response as Map<String, dynamic>;
+    } catch (e) {
+      print('Error fetching summary data: $e');
+      return {};
     }
   }
 
@@ -355,16 +373,40 @@ class _HomePageState extends State<HomePage>
                             ),
                           ],
                         ),
-                        SumaryWidget(
-                          data: [
-                            ElementosSumary(name: 'Name', value: 20),
-                            ElementosSumary(
-                                name: 'Email',
-                                value: 50), // Assuming 0 for empty value
-                            ElementosSumary(name: 'Shoulders', value: 25),
-                            ElementosSumary(name: 'Weight', value: 75),
-                            ElementosSumary(name: 'Height', value: 90),
-                          ],
+                        FutureBuilder<Map<String, dynamic>>(
+                          future: fetchSummaryData(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              print(snapshot.error);
+                              return Center(
+                                  child: Text('Error: ${snapshot.error}'));
+                            } else if (!snapshot.hasData) {
+                              return Center(child: Text('Loading summary...'));
+                            } else {
+                              final data = snapshot.data!;
+
+                              return SumaryWidget(
+                                data: [
+                                  ElementosSumary(
+                                      name: 'Name', value: data['name'] ?? 0),
+                                  ElementosSumary(
+                                      name: 'Email', value: data['email'] ?? 0),
+                                  ElementosSumary(
+                                      name: 'Shoulders',
+                                      value: data['shoulders'] ?? 0),
+                                  ElementosSumary(
+                                      name: 'Weight',
+                                      value: data['weight'] ?? 0),
+                                  ElementosSumary(
+                                      name: 'Height',
+                                      value: data['height'] ?? 0),
+                                ],
+                              );
+                            }
+                          },
                         ),
                       ],
                     ),
