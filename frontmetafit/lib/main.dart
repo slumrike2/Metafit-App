@@ -71,18 +71,19 @@ class MyApp extends StatelessWidget {
         forgottenPassword.routeName: (context) => const forgottenPassword(),
         Screen.routeName: (context) => const Screen(),
         Routinepreview.routeName: (context) {
-          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+          final args = ModalRoute.of(context)!.settings.arguments
+              as Map<String, dynamic>;
           return Routinepreview(workoutData: args);
         },
         Selectvariantexercise.routeName: (context) =>
             const Selectvariantexercise(),
         Doroutine.routeName: (context) {
-          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+          final args = ModalRoute.of(context)!.settings.arguments
+              as Map<String, dynamic>;
           return Doroutine(workoutData: args);
         }
       },
-     
-      initialRoute: (supabase.auth.currentUser != null)
+      initialRoute: supabase.auth.currentUser != null
           ? Screen.routeName
           : LoginPage.routeName,
     );

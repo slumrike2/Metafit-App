@@ -6,7 +6,8 @@ import 'package:frontmetafit/Pages/Home/Screen.dart';
 import 'package:frontmetafit/const.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:intl/intl.dart';
+
+import 'package:http/http.dart' as http;
 
 import '../../Components/ConfirmButton.dart';
 
@@ -488,8 +489,6 @@ class _registerPageState extends State<registerPage> {
                                     .toString(),
                               );
 
-                              print(gender);
-
                               if (supabase.auth.currentUser != null) {
                                 await supabase.from('users').insert([
                                   {
@@ -521,14 +520,12 @@ class _registerPageState extends State<registerPage> {
                                 Navigator.pop(context);
                                 Navigator.pushReplacementNamed(
                                     context, Screen.routeName);
+                                await generateRoutine(
+                                    supabase.auth.currentUser!.id);
                               }
                             } catch (e) {
                               print(e.toString());
-                            } finally {
-                              setState(() {
-                                _isLoading = false;
-                              });
-                            }
+                            } finally {}
                           },
                           text: 'Sign Up',
                         ),
@@ -541,5 +538,9 @@ class _registerPageState extends State<registerPage> {
     );
   }
 
-  void verificarPassword() {}
+  Future generateRoutine(String id) async {
+    print('Test');
+    final response = await http.get(Uri.parse(
+        'https://xjl0vrff-8000.use.devtunnels.ms/gen_routine?user_uid=${supabase.auth.currentUser!.id}'));
+  }
 }

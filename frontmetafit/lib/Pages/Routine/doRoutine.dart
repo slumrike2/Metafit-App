@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontmetafit/Components/ConfirmButton.dart';
 import 'package:frontmetafit/Components/ExcersiceExpanded.dart';
 import 'package:frontmetafit/Pages/Routine/Review.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Doroutine extends StatefulWidget {
   const Doroutine({super.key, required this.workoutData});
@@ -16,6 +17,7 @@ class Doroutine extends StatefulWidget {
 }
 
 class _DoroutineState extends State<Doroutine> {
+  SupabaseClient supabase = Supabase.instance.client;
   String selectedExercise = '';
   int currentPage = 0;
   int remainingTime = 0;
@@ -47,7 +49,7 @@ class _DoroutineState extends State<Doroutine> {
     });
   }
 
-  void nextPage(int aux) {
+  void nextPage(int aux) async {
     if (currentPage < aux) {
       // Adjust the condition based on the number of pages
       _pageController.nextPage(
@@ -56,6 +58,9 @@ class _DoroutineState extends State<Doroutine> {
       );
       return;
     }
+    await supabase.from('workouts').update({
+      'done': true,
+    }).eq('id', widget.workoutData['id']);
 
     Navigator.pop(context);
   }
@@ -100,6 +105,7 @@ class _DoroutineState extends State<Doroutine> {
         children: [
           PageView(
             controller: _pageController,
+            physics: NeverScrollableScrollPhysics(), // Disable swiping
             onPageChanged: (index) {
               setState(() {
                 currentPage = index;
@@ -119,13 +125,15 @@ class _DoroutineState extends State<Doroutine> {
                       ? realExercises[i]['exercises']['exercise_equipment'][0]
                           ['equipment']['name']
                       : 'Body Only',
-                  muscles: realExercises[i]['muscles'] ?? 'none',
+                  muscles: GetMuscles(realExercises[i]['exercises']
+                          ['exercise_muscle_groups']) ??
+                      'none',
                   series: realExercises[i]['sets'],
                   reps: realExercises[i]['reps'],
                 ),
                 Review(
                   idExercise: realExercises[i]['id'] ?? 1,
-                  idRoutine: args?['idRoutine'] ?? 1,
+                  idRoutine: args?['id'] ?? 1,
                   isLast: i == realExercises.length - 1,
                 ),
               ],
@@ -145,5 +153,17 @@ class _DoroutineState extends State<Doroutine> {
         ],
       ),
     );
+  }
+
+  String? GetMuscles(List<dynamic> muscles) {
+    String? muscle;
+    for (var m in muscles) {
+      muscle ??= '';
+      muscle += m['muscles']['name'] + ', ';
+    }
+    if (muscle != null && muscle.isNotEmpty) {
+      muscle = muscle.substring(0, muscle.length - 2);
+    }
+    return muscle;
   }
 }

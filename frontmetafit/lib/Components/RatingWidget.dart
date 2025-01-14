@@ -48,21 +48,23 @@ class _RatingwidgetState extends State<Ratingwidget> {
       }
     } else if (widget.type == Type.Routine_Difficulty) {
       try {
+        print(widget.idRoutine);
         await supabase.from('workout_rating').upsert({
           'workout_id': widget.idRoutine,
           'difficulty_rating': _currentRating.toInt(),
         });
-      } on Exception catch (e) {
+      } catch (e) {
         print(e.toString());
       }
       // Save the rating for the routine difficulty
     } else if (widget.type == Type.Routine_Rating) {
       try {
+        print(widget.idRoutine);
         await supabase.from('workout_rating').upsert({
           'workout_id': widget.idRoutine,
           'routine_rating': _currentRating.toInt(),
         });
-      } on Exception catch (e) {
+      } catch (e) {
         print(e.toString());
       }
       // Save the rating for the routine

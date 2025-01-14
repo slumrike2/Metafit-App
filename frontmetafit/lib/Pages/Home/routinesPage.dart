@@ -22,18 +22,27 @@ class _RoutinesPageState extends State<RoutinesPage> {
     _workoutData = fetchWorkoutData();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   Future<List<Map<String, dynamic>>> fetchWorkoutData() async {
-    final response = await Supabase.instance.client
-        .from('workouts')
-        .select('*, workout_exercises(*, exercises(*, exercise_equipment(*, equipment(*))))')
-        .eq('user_id', Supabase.instance.client.auth.currentUser!.id);
+    while (true) {
+      final response = await Supabase.instance.client
+          .from('workouts')
+          .select(
+              '*, workout_exercises(*, exercises(*, exercise_muscle_groups(*,muscles(*)) ,exercise_equipment(*, equipment(*))))')
+          .eq('user_id', Supabase.instance.client.auth.currentUser!.id)
+          .eq('created_at', DateTime.now().toIso8601String().split('T').first);
 
-    final data = response as List<dynamic>;
-    if (data.isEmpty) {
-      throw Exception('No workout data available');
+      final data = response as List<dynamic>;
+
+      if (!data.isEmpty) {
+        return data as List<Map<String, dynamic>>;
+      }
+      await Future.delayed(Duration(seconds: 5));
     }
-
-    return data as List<Map<String, dynamic>>;
   }
 
   @override
@@ -44,7 +53,17 @@ class _RoutinesPageState extends State<RoutinesPage> {
         future: _workoutData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+              child: Container(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                      Text('Loading routines...'),
+                    ],
+                  )),
+            );
           } else if (snapshot.hasError) {
             print(snapshot.error);
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -52,11 +71,16 @@ class _RoutinesPageState extends State<RoutinesPage> {
             return Center(child: Text('No workout data available'));
           } else {
             final workouts = snapshot.data!;
+
+            workouts.sort(
+                (a, b) => b['recomendation'].compareTo(a['recomendation']));
+
             final firstWorkout = workouts[0];
             final otherWorkouts = workouts.sublist(1);
             return Column(
               children: [
                 Column(
+                  spacing: 16,
                   children: [
                     Container(
                       width: double.infinity,
@@ -80,6 +104,7 @@ class _RoutinesPageState extends State<RoutinesPage> {
                   child: SingleChildScrollView(
                     padding: EdgeInsets.all(32),
                     child: Column(
+                      spacing: 16,
                       children: [
                         for (var workout in otherWorkouts)
                           RoutineWidget(

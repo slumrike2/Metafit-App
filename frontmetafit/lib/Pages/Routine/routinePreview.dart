@@ -21,6 +21,7 @@ class _RoutinepreviewState extends State<Routinepreview> {
   @override
   Widget build(BuildContext context) {
     final sizew = MediaQuery.of(context).size.width;
+    final sizeh = MediaQuery.of(context).size.height;
     final exercises = widget.workoutData['workout_exercises'] as List<dynamic>;
 
     return Scaffold(
@@ -33,7 +34,9 @@ class _RoutinepreviewState extends State<Routinepreview> {
           child: Column(
             children: [
               Expanded(
+                flex: 8,
                 child: ListView.builder(
+                  clipBehavior: Clip.none,
                   itemCount: CantExercises(exercises),
                   itemBuilder: (context, index) {
                     final sequenceExercises = exercises
@@ -79,7 +82,8 @@ class _RoutinepreviewState extends State<Routinepreview> {
                     );
                   },
                 ),
-              )
+              ),
+              Spacer(),
             ],
           ),
         ),

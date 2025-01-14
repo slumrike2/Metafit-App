@@ -19,7 +19,8 @@ class _forgottenPasswordState extends State<Screen> {
   SupabaseClient supabase = Supabase.instance.client;
   String? userId;
 
-  initState() {
+  @override
+  void initState() {
     userId = supabase.auth.currentUser?.id;
     super.initState();
   }
@@ -35,7 +36,7 @@ class _forgottenPasswordState extends State<Screen> {
   Future<String> _fetchUserName() async {
     final response = await Supabase.instance.client
         .from('users')
-        .select('full_name')
+        .select('*')
         .eq('id', userId!)
         .single();
     return response['full_name'] as String;

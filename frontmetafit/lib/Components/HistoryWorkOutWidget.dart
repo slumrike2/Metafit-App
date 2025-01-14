@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:frontmetafit/const.dart';
 
 class Historyworkoutwidget extends StatelessWidget {
-  const Historyworkoutwidget({super.key});
+  final name;
+  final stars;
+
+  const Historyworkoutwidget({super.key, this.name, this.stars});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class Historyworkoutwidget extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              'Shoulder Workout',
+              name,
               textAlign: TextAlign.center,
               style: TextStyles.bodyBebas(context),
               overflow: TextOverflow.ellipsis,
@@ -32,7 +35,7 @@ class Historyworkoutwidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '2/5',
+                  '${stars}/5',
                   textAlign: TextAlign.center,
                   style: TextStyles.bodyBebas(context),
                 ),

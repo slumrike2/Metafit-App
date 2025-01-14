@@ -17,33 +17,81 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Center(
-              child: ElevatedButton(
-                  onPressed: () {
-                    supabase.auth.signOut();
-                    Navigator.pushReplacementNamed(
-                        context, LoginPage.routeName);
-                  },
-                  child: Text('Sign Out'))),
-          Center(
-              child: ElevatedButton(
-                  onPressed: () async {
-                    final response = await http.get(
-                        Uri.parse('https://t8vf9bk0-8000.use2.devtunnels.ms/'));
-                    if (response.statusCode == 200) {
-                      print('Response data: ${response.body}');
-                    } else {
-                      print('Failed to load data');
-                    }
-                  },
-                  child: Text(
-                    'Test',
-                    style: TextStyles.headline0(context),
-                  ))),
-        ],
+      body: Container(
+        margin: EdgeInsets.all(8),
+        child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: settingsOptions.length,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(settingsOptions[index]['icon']),
+                      title: Text(
+                        settingsOptions[index]['title'],
+                        style: TextStyles.headline2(context),
+                      ),
+                      onTap: () {
+                        settingsOptions[index]['action'](context);
+                      },
+                    ),
+                    Divider(
+                      thickness: 1,
+                      indent: 16,
+                      endIndent: 16,
+                    ),
+                  ],
+                ),
+              );
+            }),
       ),
     );
   }
+
+  final List<Map<String, dynamic>> settingsOptions = [
+    {
+      'title': 'Account',
+      'icon': Icons.account_circle,
+      'action': (BuildContext context) {},
+    },
+    {
+      'title': 'Personal',
+      'icon': Icons.person,
+      'action': (BuildContext context) {},
+    },
+    {
+      'title': 'Workouts',
+      'icon': Icons.fitness_center,
+      'action': (BuildContext context) async {
+        print('Getting workouts');
+        final response = await http.get(Uri.parse(
+            'https://xjl0vrff-8000.use.devtunnels.ms/gen_routine?user_uid=${Supabase.instance.client.auth.currentUser!.id}'));
+      },
+    },
+    {
+      'title': 'Privacy and Security',
+      'icon': Icons.lock,
+      'action': (BuildContext context) {},
+    },
+    {
+      'title': 'About',
+      'icon': Icons.info,
+      'action': (BuildContext context) {},
+    },
+    {
+      'title': 'Logout',
+      'icon': Icons.logout,
+      'action': (BuildContext context) async {
+        await Supabase.instance.client.auth.signOut();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
+      },
+    },
+    // Add more options here if needed
+  ];
 }
